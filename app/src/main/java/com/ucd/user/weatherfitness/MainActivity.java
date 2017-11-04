@@ -3,7 +3,6 @@ package com.ucd.user.weatherfitness;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-
 ////comment
 
 public class MainActivity extends AppCompatActivity {
