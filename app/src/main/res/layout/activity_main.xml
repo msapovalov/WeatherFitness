@@ -17,25 +17,44 @@
         android:text="LOCATION"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/editText3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/score_ID"
+        style="@style/Base.TextAppearance.AppCompat"
+        android:layout_width="wrap_content"
+        android:layout_height="206dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:labelFor="@+id/score_ID"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button1" />
 
     <Button
         android:id="@+id/button2"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="333dp"
         android:layout_height="50dp"
-        android:layout_marginTop="32dp"
         android:text="Schedule Workout"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/score_ID"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button3"
@@ -45,7 +64,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:text="Start Workout Now"
+        android:text="@string/start_workout_now"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/button4"
@@ -68,29 +87,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3" />
-
-    <EditText
-        android:id="@+id/editText3"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_height="206dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:inputType="number"
-        android:labelFor="@+id/editText3"
-        android:selectAllOnFocus="false"
-        android:singleLine="false"
-        android:text="SCORE: 10"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button1"
-        android:layout_width="wrap_content" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
