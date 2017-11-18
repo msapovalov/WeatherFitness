@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import com.ucd.user.weatherfitness.model.FetchWeatherTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,6 +14,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView score_id = (TextView)findViewById(R.id.score_ID);
+        FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+        weatherTask.execute("7778677");
 
         Button btn = (Button) findViewById(R.id.button1);
         btn.setOnClickListener(new View.OnClickListener(){
@@ -31,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick (View v) {
-
 
 
                 }});
