@@ -15,8 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.survivingwithandroid.weatherapp.model.Location;
-import com.survivingwithandroid.weatherapp.model.Weather;
+import com.ucd.user.weatherfitness.model.Location;
+import com.ucd.user.weatherfitness.model.Weather;
 
 /*
  * Copyright (C) 2013 Surviving with Android (http://www.survivingwithandroid.com)
