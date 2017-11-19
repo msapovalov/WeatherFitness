@@ -2,4 +2,5 @@
 <resources>
     <item name="fab" type="id">fab</item>
     <item name="score_ID" type="id" />
+    <item name="DisplayTextView" type="id">DisplayTextView</item>
 </resources>
