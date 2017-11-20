@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="25sp"
-        android:text="Current Week"
+        android:text="@string/Week"
         android:layout_marginTop="40dp"
         android:id="@+id/textWeek"/>
 

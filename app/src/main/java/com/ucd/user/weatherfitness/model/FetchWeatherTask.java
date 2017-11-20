@@ -130,7 +130,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             double low = temperatureObject.getDouble(OWM_MIN);
 
             highAndLow = formatHighLows(high, low);
-            resultStrs[i] = day + " - " + description + " - " + highAndLow;
+            resultStrs[i] = "Date is: " + day + System.lineSeparator() + "Precipitation: " + description + System.lineSeparator() + "Highest temperature today: "
+                    + high + System.lineSeparator() + "Lowest temperature today: " + low;
         }
 
         //for (String s : resultStrs) {
