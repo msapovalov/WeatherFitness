@@ -14,13 +14,27 @@
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:text="LOCATION"
+        android:text="@string/choose_location"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/black"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button1" />
 
     <TextView
         android:id="@+id/score_ID"
@@ -41,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button1" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
 
     <Button
         android:id="@+id/button2"
@@ -50,7 +64,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:text="Schedule Workout"
+        android:text="@string/schedule_workout"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/button3"
@@ -80,7 +94,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:text="Show Workouts History"
+        android:text="@string/show_workouts_history"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
