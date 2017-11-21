@@ -1,18 +1,10 @@
 package com.ucd.user.weatherfitness.model;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.os.Bundle;
-
-import com.ucd.user.weatherfitness.MainActivity;
-import com.ucd.user.weatherfitness.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +17,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by User on 11/18/2017.

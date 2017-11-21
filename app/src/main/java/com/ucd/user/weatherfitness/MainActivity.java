@@ -1,41 +1,42 @@
 package com.ucd.user.weatherfitness;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.ucd.user.weatherfitness.model.FetchWeatherTask;
 
 
 public class MainActivity extends AppCompatActivity {
-    TextView tvAddress;
-    AppLocationService appLocationService;
+
+
+    //db vars
+    Time today = new Time(Time.getCurrentTimezone());
+    DBAdapter myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvAddress = (TextView) findViewById(R.id.tvAddress);
-        appLocationService = new AppLocationService(
-                MainActivity.this);
-
+         //current weather implementation code
         TextView score_id = findViewById(R.id.score_ID);
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
         weatherTask.execute("7778677");
 
+        //sqlite db implementation
+
+        openDB();
+        populateListView();
+
+        //main activity buttons
         Button btn = findViewById(R.id.button1);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,43 +49,15 @@ public class MainActivity extends AppCompatActivity {
         Button btn1 = findViewById(R.id.button2);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View arg0) {
-                Location gpsLocation;
-                gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-                if (gpsLocation != null) {
-                    double latitude = gpsLocation.getLatitude();
-                    double longitude = gpsLocation.getLongitude();
-                    String result = "Latitude: " + gpsLocation.getLatitude() +
-                            " Longitude: " + gpsLocation.getLongitude();
-                    tvAddress.setText(result);
-                } else {
-                    showSettingsAlert();
-                }
+            public void onClick(View v) {
+
             }
         });
+
         Button btn2 = findViewById(R.id.button3);
         btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-
-                Location location = appLocationService
-                        .getLocation(LocationManager.GPS_PROVIDER);
-
-                //you can hard-code the lat & long if you have issues with getting it
-                //remove the below if-condition and use the following couple of lines
-                //double latitude = 37.422005;
-                //double longitude = -122.084095
-
-                if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    LocationAddress locationAddress = new LocationAddress();
-                    locationAddress.getAddressFromLocation(latitude, longitude,
-                            getApplicationContext(), new GeocoderHandler());
-                } else {
-                    showSettingsAlert();
-                }
-
+                @Override
+                public void onClick(View v) {
 
             }
         });
@@ -100,42 +73,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //sqllite methods
 
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                MainActivity.this);
-        alertDialog.setTitle("SETTINGS");
-        alertDialog.setMessage("Enable Location Provider! Go to settings menu?");
-        alertDialog.setPositiveButton("Settings",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(
-                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        MainActivity.this.startActivity(intent);
-                    }
-                });
-        alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        alertDialog.show();
+    private void openDB(){
+        myDb = new DBAdapter(this);
+        myDb.open();
+
     }
 
-    private class GeocoderHandler extends Handler {
-        @Override
-        public void handleMessage(Message message) {
-            String locationAddress;
-            switch (message.what) {
-                case 1:
-                    Bundle bundle = message.getData();
-                    locationAddress = bundle.getString("address");
-                    break;
-                default:
-                    locationAddress = null;
-            }
-            tvAddress.setText(locationAddress);
-        }
+    public void onClick_StartNow (View v) {
+        today.setToNow();
+        String timestamp = today.format("%Y-%m-%d %H:%M:%S");
+        String location = "Current Address"; /// need to implement this method
+        String score = "5"; //score algorithm (Sam)
+        //We need to parse through openweathermap json and get these values, same passed to score algorithm
+        //possibly modify FetchWeatherClass?
+
+        String wind = "10 m/s";
+        String precipitation = "snow";
+        String temperature = "10";
+        String pressure = "1007";
+        String lat = "53.305344";
+        String lon = "-6.220654";
+
+        myDb.insertRow(timestamp,location, score, wind, precipitation, temperature, pressure, lat, lon);
+        populateListView();
+
+    }
+
+    private void populateListView() {
+        Cursor cursor = myDb.getAllRows();
+        String[] fromFieldNames = new String[]{DBAdapter.KEY_ROWID, DBAdapter.KEY_DATETIME, DBAdapter.KEY_LOCATION, DBAdapter.KEY_SCORE};
+        int[] toViewIDs = new int[]{R.id.TextViewID, R.id.TextViewDate, R.id.TextViewLocation, R.id.TextViewScore};
+        SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
+        ListView myList = (ListView) findViewById(R.id.Listview_fragment2);
+        myList.setAdapter(myCursorAdapter);
     }
 }
+
