@@ -29,12 +29,12 @@ public class DBAdapter {
     public static final String KEY_LON = "lon";
 
 
-    public final String[] ALL_KEYS = new String[]{KEY_ROWID, KEY_DATETIME, KEY_LAT, KEY_LON, KEY_LOCATION, KEY_PRECIPITATION, KEY_PRESSURE, KEY_TEMPERATURE, KEY_WIND, KEY_SCORE};
+    public final String[] ALL_KEYS = new String[]{KEY_ROWID, KEY_DATETIME, KEY_LOCATION, KEY_SCORE,KEY_WIND, KEY_PRECIPITATION, KEY_TEMPERATURE, KEY_PRESSURE, KEY_LAT, KEY_LON};
 
 
     //KEY numbers
 
-    public static final int COL_ID = 0;
+    public static final int COL_ROWID = 0;
     public static final int COL_DATETIME = 1;
     public static final int COL_LOCATION = 2;
     public static final int COL_SCORE = 3;
@@ -49,11 +49,11 @@ public class DBAdapter {
 
     public static final String DATABASE_NAME = "db";
     public static final String DATABASE_TABLE = "weather";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //SQL Statement to create DB
 
-    private static final String DATABASE_CREATE_SQL = "create table "
+    private static final String DATABASE_CREATE_SQL = "create table if not exists"
             + DATABASE_TABLE
             + " ("
             + KEY_ROWID + " integer primary key autoincrement, "
@@ -124,7 +124,7 @@ public class DBAdapter {
     //select all
     public Cursor getAllRows() {
         String where = null;
-        Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
+        Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
             if (c != null) {
                 c.moveToFirst();
             }
