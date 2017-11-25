@@ -6,6 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.format.Time;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+
+import com.ucd.user.weatherfitness.model.FetchWeatherTask;
+
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -53,7 +69,7 @@ public class DBAdapter {
 
     //SQL Statement to create DB
 
-    private static final String DATABASE_CREATE_SQL = "create table if not exists"
+    private static final String DATABASE_CREATE_SQL = "create table "
             + DATABASE_TABLE
             + " ("
             + KEY_ROWID + " integer primary key autoincrement, "
@@ -68,6 +84,8 @@ public class DBAdapter {
             + KEY_SCORE + " text"
             + ");";
 
+
+
     private final Context context;
     private DatabaseHelper myDBHelper;
     private SQLiteDatabase db;
@@ -77,8 +95,12 @@ public class DBAdapter {
         myDBHelper = new DatabaseHelper(context);
     }
 
-    public DBAdapter open() {
+    public DBAdapter open () {
         db = myDBHelper.getWritableDatabase();
+        return this;
+    }
+    public DBAdapter openread() {
+        db = myDBHelper.getReadableDatabase();
         return this;
     }
 
@@ -133,8 +155,8 @@ public class DBAdapter {
 
     //select single row
 
-    public Cursor getRow(long rowId) {
-        String where = KEY_ROWID + "=" + rowId;
+    public Cursor getRow(String datetime) {
+        String where = KEY_DATETIME + "<" + datetime;
         Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
         if (c != null) {
             c.moveToFirst();
