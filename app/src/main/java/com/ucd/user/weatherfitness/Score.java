@@ -1,19 +1,21 @@
-import java.sql.Time;
+package com.ucd.user.weatherfitness;
+
+import android.util.Log;
 
 public class Score {
 
-	private double precip;
+	private String precip;
 	private double temp;
 	private double humidity;
 	private double wind;
 	
-	Score(double p, double t, double h, double w){
+	public Score(String p, double t, double h, double w){
 		precip = p;
 		temp = t;
 		humidity = h;
 		wind = w;
 	}
-	
+
 	public int calculateScore() {
 		
 		int precipScore = precipScore();
@@ -22,26 +24,31 @@ public class Score {
 		int windScore = windScore();
 		
 		int score = (precipScore + tempScore + humidityScore + windScore) / 4;
-		
-		return (int) score;
+        Log.d("Precip score", String.valueOf(precipScore));
+        Log.d("Temp score", String.valueOf(tempScore));
+        Log.d("Humidity score", String.valueOf(humidityScore));
+        Log.d("Wind score", String.valueOf(windScore));
+
+        return score;
 	}
 	
 	private int precipScore() {
 		int score = 0;
 		
-		if (precip < 0.5)
+		if (precip.equalsIgnoreCase("Clear"))
 			score = 10;
-		else if (precip < 1)
-			score = 8;
-		else if (precip < 2)
-			score = 6;
-		else if (precip < 3)
+		else if (precip.equalsIgnoreCase("Clouds"))
+			score = 9;
+        else if (precip.equalsIgnoreCase("Drizzle"))
+            score = 6;
+        else if (precip.equalsIgnoreCase("Rain"))
 			score = 4;
-		else if (precip < 5)
+        else if (precip.equalsIgnoreCase("Thunderstorm"))
+            score = 4;
+        else if (precip.equalsIgnoreCase("Snow"))
 			score = 2;
-		else
+		else if (precip.equalsIgnoreCase("Extreme"))
 			score = 1;
-		
 		return score;
 	}
 	
@@ -81,27 +88,25 @@ public class Score {
 		
 		int score = 0;
 		
-		if (temp < 268.15)	// - 5C
+		if (temp <= -5)	// - 5C
 			score = 1;
-		else if(temp < 273.15)	// 0C
-			score = 3;
-		else if(temp < 278.15)	// 5C
+		else if(temp >= 0 && temp < 5 )	// 0C
+			score = 2;
+		else if(temp >= 5 && temp < 10)	// 5C
 			score = 5;
-		else if(temp < 283.15)	// 10C
+		else if(temp >= 10 && temp < 15)	// 10C
 			score = 7;
-		else if(temp < 288.15) // 15C
+		else if(temp >= 15 && temp < 20) // 15C
 			score = 9;
-		else if(temp < 293.15) // 20C
+		else if(temp >= 20 && temp < 25) // 20C
 			score = 10;
-		else if(temp < 298.15) // 25C
+		else if(temp >= 25 && temp < 30) // 25C
 			score = 8;
-		else if(temp < 303.15) // 30C
+		else if(temp >= 30 && temp < 35) // 30C
 			score = 5;
-		else if(temp < 308.15) // 35C
-			score = 3;
-		else
+		else if(temp >= 35) // 35C
 			score = 1;
-		
+
 		return score;
 	}
 
@@ -110,15 +115,15 @@ public class Score {
 		
 		int score = 0;
 		
-		if (humidity < 10)	
+		if (humidity < 10)
 			score = 10;
-		else if(humidity < 20)	
+		else if(humidity < 20)
 			score = 9;
-		else if(humidity < 30)	
+		else if(humidity < 30)
 			score = 8;
-		else if(humidity < 40)	
+		else if(humidity < 40)
 			score = 6;
-		else if(humidity < 60) 
+		else if(humidity < 60)
 			score = 4;
 		else if(humidity < 80) 
 			score = 2;
@@ -126,6 +131,6 @@ public class Score {
 			score = 1;
 
 		
-		return score;
+		return Math.round(score);
 	}
 }

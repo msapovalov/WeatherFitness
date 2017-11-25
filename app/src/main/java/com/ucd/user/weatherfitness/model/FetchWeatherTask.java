@@ -6,6 +6,8 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.ucd.user.weatherfitness.Score;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 
 /**
  * Created by User on 11/18/2017.
@@ -35,6 +37,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
     /* The date/time conversion code is going to be moved outside the asynctask later,
     * so for convenience we're breaking it out into its own method now.
     */
+
     private String getReadableDateString(long time){
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
@@ -126,6 +129,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
             // Temperatures are in a child object called "temp".  Try not to name variables
             // "temp" when working with temperature.  It confuses everybody.
+
             JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
             double daytemp = temperatureObject.getDouble(OWM_DAY);
             double high = temperatureObject.getDouble(OWM_MAX);
@@ -135,9 +139,18 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             humidity = dayForecast.getDouble(OWM_HUMIDITY);
             speed = dayForecast.getDouble(OWM_WIND);
 
-            resultStrs[i] = "Date is: " + day + System.lineSeparator() + "Precipitation: " + description + System.lineSeparator() + "Day temperature: " + daytemp + System.lineSeparator() + "Highest temperature today: "
-                    + high + System.lineSeparator() + "Lowest temperature today: " + low + System.lineSeparator() + "Pressure: " + pressure + System.lineSeparator() + "Humidity: " + humidity +
-                    System.lineSeparator() + "Wind speed: " + speed + "m/s";
+            Score score = new Score(description,Math.round(daytemp),Math.round(humidity),Math.round(speed));
+            int iscore = score.calculateScore();
+
+            Log.d("Precip", description);
+            Log.d("Temp", String.valueOf(Math.round(daytemp)));
+            Log.d("Wind", String.valueOf(Math.round(speed)));
+            Log.d("Humidity", String.valueOf(Math.round(humidity)));
+
+            //added math.round to weather
+            resultStrs[i] = "Date is: " + day + System.lineSeparator() + "Precipitation: " + description + System.lineSeparator() + "Day temperature:   " + Math.round(daytemp) + System.lineSeparator() + "Highest temperature today:   "
+                    + Math.round(high) + System.lineSeparator() + "Lowest temperature today:   " + Math.round(low) + System.lineSeparator() + "Pressure: " + Math.round(pressure) + System.lineSeparator() + "Humidity: " + humidity + "%" +
+                    System.lineSeparator() + "Wind speed: " + Math.round(speed) + " meter/sec" + System.lineSeparator() + "SCORE: " +iscore;
         }
 
         //for (String s : resultStrs) {
@@ -167,7 +180,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         String format = "json";
         String units = "metric";
-        int numDays = 10;
+        int numDays = 1;
 
         // You will need to replace this key with your own one. To get a key
         // go to http://openweathermap.org/api and sign up.
