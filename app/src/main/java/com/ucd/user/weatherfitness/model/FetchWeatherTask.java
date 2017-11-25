@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by User on 11/18/2017.
@@ -68,9 +69,14 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         final String OWM_LIST = "list";
         final String OWM_WEATHER = "weather";
         final String OWM_TEMPERATURE = "temp";
+        final String OWM_DAY = "day";
         final String OWM_MAX = "max";
         final String OWM_MIN = "min";
         final String OWM_DESCRIPTION = "main";
+        final String OWM_WIND = "speed";
+        final String OWM_PRESSURE = "pressure";
+        final String OWM_HUMIDITY = "humidity";
+
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
         JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
@@ -97,7 +103,10 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
-            String highAndLow;
+            double pressure;
+            double humidity;
+            double speed;
+
 
             // Get the JSON object representing the day
             JSONObject dayForecast = weatherArray.getJSONObject(i);
@@ -107,6 +116,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // "this saturday".
             long dateTime;
             // Cheating to convert this to UTC time, which is what we want anyhow
+
             dateTime = dayTime.setJulianDay(julianStartDay+i);
             day = getReadableDateString(dateTime);
 
@@ -117,17 +127,23 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // Temperatures are in a child object called "temp".  Try not to name variables
             // "temp" when working with temperature.  It confuses everybody.
             JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
+            double daytemp = temperatureObject.getDouble(OWM_DAY);
             double high = temperatureObject.getDouble(OWM_MAX);
             double low = temperatureObject.getDouble(OWM_MIN);
 
-            highAndLow = formatHighLows(high, low);
-            resultStrs[i] = "Date is: " + day + System.lineSeparator() + "Precipitation: " + description + System.lineSeparator() + "Highest temperature today: "
-                    + high + System.lineSeparator() + "Lowest temperature today: " + low;
+            pressure = dayForecast.getDouble(OWM_PRESSURE);
+            humidity = dayForecast.getDouble(OWM_HUMIDITY);
+            speed = dayForecast.getDouble(OWM_WIND);
+
+            resultStrs[i] = "Date is: " + day + System.lineSeparator() + "Precipitation: " + description + System.lineSeparator() + "Day temperature: " + daytemp + System.lineSeparator() + "Highest temperature today: "
+                    + high + System.lineSeparator() + "Lowest temperature today: " + low + System.lineSeparator() + "Pressure: " + pressure + System.lineSeparator() + "Humidity: " + humidity +
+                    System.lineSeparator() + "Wind speed: " + speed + "m/s";
         }
 
         //for (String s : resultStrs) {
         //    Log.v(LOG_TAG, "Forecast entry: " + s);
         //}
+
         return resultStrs;
 
     }

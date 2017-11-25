@@ -3,12 +3,16 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 /**
  * Created by mihhail_shapovalov on 11/18/17.
@@ -16,26 +20,34 @@ import android.widget.SimpleCursorAdapter;
 
 public class TabWeek extends Fragment {
     private static final String TAG = "TabWeek";
+
     DBAdapter myDb;
-    Time today = new Time(Time.getCurrentTimezone());
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history_week, container, false);
-           return view;
+        populateListView(view);
+        return view;
 
     }
 
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDb = new DBAdapter(getActivity());
+        //open activity before db connection
         myDb.open();
     }
 
     private void populateListView(View view) {
-        today.setToNow();
-        String timestamp = today.format("%Y-%m-%d %H:%M:%S");
-        Cursor cursor = myDb.getRow(timestamp);
+        Calendar cal = Calendar.getInstance();
+        //Convert date to simpleformat
+        cal.add(Calendar.DAY_OF_YEAR, -7);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sevenDaysAgo =format1.format(cal.getTime());
+        Log.d("Tabweek", sevenDaysAgo);
+
+        Cursor cursor = myDb.getRow(sevenDaysAgo);
         String[] fromFieldNames = new String[]{DBAdapter.KEY_ROWID, DBAdapter.KEY_DATETIME, DBAdapter.KEY_LOCATION, DBAdapter.KEY_SCORE};
         int[] toViewIDs = new int[]{R.id.TextViewID, R.id.TextViewDate, R.id.TextViewLocation, R.id.TextViewScore};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(getActivity().getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);

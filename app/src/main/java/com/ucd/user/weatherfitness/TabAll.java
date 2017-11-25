@@ -29,7 +29,7 @@ public class TabAll extends Fragment {
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDb = new DBAdapter(getActivity());
-            myDb.open();
+        myDb.openread();
     }
 
     private void populateListView(View view) {
