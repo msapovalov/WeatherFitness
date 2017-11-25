@@ -16,10 +16,9 @@ import com.ucd.user.weatherfitness.model.FetchWeatherTask;
 
 public class MainActivity extends AppCompatActivity {
 
-
     //db vars
     Time today = new Time(Time.getCurrentTimezone());
-    DBAdapter myDb;
+    public DBAdapter myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
                 MainActivity.this.startActivity(newIntent);
+                myDb.close();
             }
         });
 
@@ -76,25 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
     //sqllite methods
 
-    private void openDB(){
+    public void openDB(){
         myDb = new DBAdapter(this);
         myDb.open();
-        today.setToNow();
-        String timestamp = today.format("%Y-%m-%d %H:%M:%S");
-        String location = "Current Address"; /// need to implement this method
-        String score = "5"; //score algorithm (Sam)
-        //We need to parse through openweathermap json and get these values, same passed to score algorithm
-        //possibly modify FetchWeatherClass?
 
-        String wind = "10 m/s";
-        String precipitation = "snow";
-        String temperature = "10";
-        String pressure = "1007";
-        String lat = "53.305344";
-        String lon = "-6.220654";
-
-        myDb.insertRow(timestamp,location, score, wind, precipitation, temperature, pressure, lat, lon);
-        populateListView();
     }
 
     public void onClick_StartNow() {
@@ -116,14 +101,14 @@ public class MainActivity extends AppCompatActivity {
         populateListView();
 
     }
-
-    private void populateListView() {
+    public void populateListView() {
         Cursor cursor = myDb.getAllRows();
         String[] fromFieldNames = new String[]{DBAdapter.KEY_ROWID, DBAdapter.KEY_DATETIME, DBAdapter.KEY_LOCATION, DBAdapter.KEY_SCORE};
         int[] toViewIDs = new int[]{R.id.TextViewID, R.id.TextViewDate, R.id.TextViewLocation, R.id.TextViewScore};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
         ListView myList = (ListView) findViewById(R.id.Listview_fragment2);
         myList.setAdapter(myCursorAdapter);
+
     }
 }
 

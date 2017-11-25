@@ -3,4 +3,5 @@
     <item name="score_ID" type="id" />
     <item name="tvAddress" type="id" />
     <item name="editTextWeather" type="id" />
+    <item name="Listview_fragment2" type="id" />
 </resources>
