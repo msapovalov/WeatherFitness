@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.ucd.user.weatherfitness.model.FetchWeatherTask;
 
 
+import java.util.Date;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -112,7 +114,7 @@ public class DBAdapter {
 
     public long insertRow(String datetime, String location, String score, String wind, String precipitation, String temperature, String pressure, String lat, String lon) {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_DATETIME, datetime);
+        initialValues.put(KEY_DATETIME, String.valueOf(datetime));
         initialValues.put(KEY_LOCATION, location);
         initialValues.put(KEY_SCORE, score);
         initialValues.put(KEY_WIND, wind);
@@ -146,7 +148,8 @@ public class DBAdapter {
     //select all
     public Cursor getAllRows() {
         String where = null;
-        Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
+        Cursor c = db.rawQuery("SELECT * FROM weather", null);
+        //Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
             if (c != null) {
                 c.moveToFirst();
             }
@@ -156,8 +159,9 @@ public class DBAdapter {
     //select single row
 
     public Cursor getRow(String datetime) {
-        String where = KEY_DATETIME + "<" + datetime;
-        Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
+        //String where = KEY_DATETIME + " < " + "'" + datetime + "'";
+        //Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
+        Cursor c = db.rawQuery("SELECT _id, datetime, location, score FROM weather WHERE datetime > ?", new String[]{datetime});
         if (c != null) {
             c.moveToFirst();
         }

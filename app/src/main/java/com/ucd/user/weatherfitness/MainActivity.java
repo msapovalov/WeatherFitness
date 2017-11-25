@@ -1,30 +1,30 @@
 package com.ucd.user.weatherfitness;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ucd.user.weatherfitness.model.FetchWeatherTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
 
     //db vars
-    Time today = new Time(Time.getCurrentTimezone());
     public DBAdapter myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
          //current weather implementation code
         TextView score_id = findViewById(R.id.score_ID);
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
         //sqlite db implementation
 
         openDB();
-        populateListView();
+        //delete all data on create
+        //myDb.deleteAll();
 
         //main activity buttons
         Button btn = findViewById(R.id.button1);
@@ -58,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                 MainActivity.this.onClick_StartNow();
-                populateListView();
-            }
+                }
         });
 
         Button btn3 = findViewById(R.id.button4);
@@ -68,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
                 MainActivity.this.startActivity(newIntent);
-                myDb.close();
-            }
+                }
         });
 
     }
@@ -79,17 +78,19 @@ public class MainActivity extends AppCompatActivity {
     public void openDB(){
         myDb = new DBAdapter(this);
         myDb.open();
+        //myDb.deleteAll();
 
     }
 
     public void onClick_StartNow() {
-        today.setToNow();
-        String timestamp = today.format("%Y-%m-%d %H:%M:%S");
+        Calendar cal = Calendar.getInstance();
+        //Date in simpleformat
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strtimestamp =format1.format(cal.getTime());
         String location = "Current Address"; /// need to implement this method
         String score = "5"; //score algorithm (Sam)
         //We need to parse through openweathermap json and get these values, same passed to score algorithm
         //possibly modify FetchWeatherClass?
-
         String wind = "10 m/s";
         String precipitation = "snow";
         String temperature = "10";
@@ -97,8 +98,9 @@ public class MainActivity extends AppCompatActivity {
         String lat = "53.305344";
         String lon = "-6.220654";
 
-        myDb.insertRow(timestamp,location, score, wind, precipitation, temperature, pressure, lat, lon);
-        populateListView();
+        myDb.insertRow(strtimestamp,location, score, wind, precipitation, temperature, pressure, lat, lon);
+        Toast.makeText(getApplicationContext(), "Your activity have been added to Database", Toast.LENGTH_SHORT).show();
+
 
     }
     public void populateListView() {
