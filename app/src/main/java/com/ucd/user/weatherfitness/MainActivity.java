@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                MainActivity.this.onClick_StartNow();
+                populateListView();
             }
         });
 
@@ -78,10 +79,25 @@ public class MainActivity extends AppCompatActivity {
     private void openDB(){
         myDb = new DBAdapter(this);
         myDb.open();
+        today.setToNow();
+        String timestamp = today.format("%Y-%m-%d %H:%M:%S");
+        String location = "Current Address"; /// need to implement this method
+        String score = "5"; //score algorithm (Sam)
+        //We need to parse through openweathermap json and get these values, same passed to score algorithm
+        //possibly modify FetchWeatherClass?
 
+        String wind = "10 m/s";
+        String precipitation = "snow";
+        String temperature = "10";
+        String pressure = "1007";
+        String lat = "53.305344";
+        String lon = "-6.220654";
+
+        myDb.insertRow(timestamp,location, score, wind, precipitation, temperature, pressure, lat, lon);
+        populateListView();
     }
 
-    public void onClick_StartNow (View v) {
+    public void onClick_StartNow() {
         today.setToNow();
         String timestamp = today.format("%Y-%m-%d %H:%M:%S");
         String location = "Current Address"; /// need to implement this method
