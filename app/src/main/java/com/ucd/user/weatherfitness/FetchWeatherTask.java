@@ -99,8 +99,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // now we work exclusively in UTC
         dayTime = new Time();
 
-        String[] resultStrs = new String[numDays];
-        for(int i = 0; i < weatherArray.length(); i++) {
+        String[] results = new String[0];
+        for (int i = 0; i < weatherArray.length(); i++) {
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
@@ -118,7 +118,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             long dateTime;
             // Cheating to convert this to UTC time, which is what we want anyhow
 
-            dateTime = dayTime.setJulianDay(julianStartDay+i);
+            dateTime = dayTime.setJulianDay(julianStartDay + i);
             day = getReadableDateString(dateTime);
 
             // description is in a child array called "weather", which is 1 element long.
@@ -137,13 +137,13 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             humidity = dayForecast.getDouble(OWM_HUMIDITY);
             speed = dayForecast.getDouble(OWM_WIND);
 
-            Score score = new Score(description,Math.round(daytemp),Math.round(humidity),Math.round(speed));
+            Score score = new Score(description, Math.round(daytemp), Math.round(humidity), Math.round(speed));
             int iscore = score.calculateScore();
 
-            Log.d("Precip", description);
-            Log.d("Temp", String.valueOf(Math.round(daytemp)));
-            Log.d("Wind", String.valueOf(Math.round(speed)));
-            Log.d("Humidity", String.valueOf(Math.round(humidity)));
+            //Log.d("Precip", description);
+            //Log.d("Temp", String.valueOf(Math.round(daytemp)));
+            //Log.d("Wind", String.valueOf(Math.round(speed)));
+            //Log.d("Humidity", String.valueOf(Math.round(humidity)));
 
             MainActivity.precipitation = description;
             MainActivity.pressure = pressure;
@@ -152,14 +152,9 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             MainActivity.score = iscore;
 
             //added math.round to weather
-            resultStrs[i] = day + description + Math.round(daytemp)+ Math.round(pressure) + humidity + Math.round(speed) + iscore;
+            results = new String[]{day, description, String.valueOf(Math.round(daytemp)), String.valueOf(Math.round(pressure)), String.valueOf(humidity), String.valueOf(Math.round(speed)), String.valueOf(iscore)};
         }
-
-        //for (String s : resultStrs) {
-        //    Log.v(LOG_TAG, "Forecast entry: " + s);
-        //}
-
-        return resultStrs;
+        return results;
 
     }
 
@@ -292,12 +287,24 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         if (results != null) {
             //TextView score_id = (TextView)findViewById(R.id.score_ID);
-            scoreID.setText(results[0]);
+            String strDate = "Date: " + results[0];
+            String strDescription = "Precipitation: " + results[1];
+            String strTemp = "Average temp: " + results[2];
+            String strPressure = "Pressure: " + results[3];
+            String strHumidity = "Humidity: " + results[4] + " %";
+            String strWind = "Wind speed: " + results[5] + " m/sec";
+            String strScore = "Score: " + results[6];
+
+            String allValues = strDate + System.lineSeparator() + strDescription + System.lineSeparator() + strTemp
+                    + System.lineSeparator() + strPressure + System.lineSeparator() + strHumidity + System.lineSeparator() +
+                    strWind + System.lineSeparator() + strScore;
+
+            scoreID.setText(allValues);
             // mForecastAdapter.clear();
             //mForecastAdapter.addAll(result);
-            for (String dayForeCastStr: results){
+            //for (String dayForeCastStr: results){
                 // mForecastAdapter.add(dayForeCastStr);
-            }
+            //}
         }
     }
 

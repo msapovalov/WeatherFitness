@@ -173,7 +173,14 @@ public class MainActivity extends AppCompatActivity {
                 location = returnValue3;
                 TextView score_id = findViewById(R.id.score_ID);
                 FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
-                weatherTask.execute(returnValue, returnValue2);
+                try {
+                    weatherTask.execute(returnValue, returnValue2).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
 
             }
         }
