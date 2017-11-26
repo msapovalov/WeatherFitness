@@ -7,7 +7,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="start_workout_now">Start Workout Now</string>
     <string name="search">Search</string>
-    <string name="save">Save</string>
     <string name="Week">Current Week</string>
     <string name="Month">Current Month</string>
     <string name="All_Activities">All Activities</string>
