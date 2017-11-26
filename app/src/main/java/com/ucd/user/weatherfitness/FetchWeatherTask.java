@@ -130,8 +130,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
             JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
             double daytemp = temperatureObject.getDouble(OWM_DAY);
-            double high = temperatureObject.getDouble(OWM_MAX);
-            double low = temperatureObject.getDouble(OWM_MIN);
+            //double high = temperatureObject.getDouble(OWM_MAX);
+            //double low = temperatureObject.getDouble(OWM_MIN);
 
             pressure = dayForecast.getDouble(OWM_PRESSURE);
             humidity = dayForecast.getDouble(OWM_HUMIDITY);
@@ -146,9 +146,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             Log.d("Humidity", String.valueOf(Math.round(humidity)));
 
             //added math.round to weather
-            resultStrs[i] = "Date is: " + day + System.lineSeparator() + "Precipitation: " + description + System.lineSeparator() + "Day temperature:   " + Math.round(daytemp) + System.lineSeparator() + "Highest temperature today:   "
-                    + Math.round(high) + System.lineSeparator() + "Lowest temperature today:   " + Math.round(low) + System.lineSeparator() + "Pressure: " + Math.round(pressure) + System.lineSeparator() + "Humidity: " + humidity + "%" +
-                    System.lineSeparator() + "Wind speed: " + Math.round(speed) + " meter/sec" + System.lineSeparator() + "SCORE: " +iscore;
+            resultStrs[i] = day + description + Math.round(daytemp)+ Math.round(pressure) + humidity + Math.round(speed) + iscore;
         }
 
         //for (String s : resultStrs) {
