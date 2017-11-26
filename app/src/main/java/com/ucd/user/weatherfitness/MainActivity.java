@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //current weather implementation code
+        //mihhail get current location - doesnt work
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationView = (TextView) findViewById(R.id.location_view);
         if (!checkLocation()) {
@@ -82,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 1000 * 60, 10, locationListenerGPS);
         }
-
+        //current weather implementation code
         TextView score_id = findViewById(R.id.score_ID);
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
-        weatherTask.execute("7778677");
+        weatherTask.execute("53","-6");
 
         //sqlite db implementation
         openDB();
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
-                MainActivity.this.startActivity(newIntent);
+                MainActivity.this.startActivityForResult(newIntent,1);
             }
         });
 
@@ -134,6 +135,27 @@ public class MainActivity extends AppCompatActivity {
         myDb.open();
         //myDb.deleteAll();
 
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                String returnValue = data.getStringExtra("lat");
+                String returnValue2 = data.getStringExtra("lng");
+
+                String message = returnValue + returnValue2;
+                TextView location_view = (TextView) findViewById(R.id.location_view);
+                location_view.setText(message);
+
+                TextView score_id = findViewById(R.id.score_ID);
+                FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+                weatherTask.execute(returnValue, returnValue2);
+
+            }
+        }
     }
 
     public void onClick_StartNow() {

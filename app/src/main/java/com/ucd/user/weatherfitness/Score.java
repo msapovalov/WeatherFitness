@@ -40,9 +40,9 @@ public class Score {
 		else if (precip.equalsIgnoreCase("Clouds"))
 			score = 9;
         else if (precip.equalsIgnoreCase("Drizzle"))
-            score = 6;
+            score = 7;
         else if (precip.equalsIgnoreCase("Rain"))
-			score = 4;
+			score = 6;
         else if (precip.equalsIgnoreCase("Thunderstorm"))
             score = 4;
         else if (precip.equalsIgnoreCase("Snow"))
@@ -84,25 +84,25 @@ public class Score {
 	}
 	
 	private int tempScore() {
-		// Temperature measured in Kelvin
+		// Temperature measured in Fahrenhight
 		
 		int score = 0;
 		
 		if (temp <= -5)	// - 5C
 			score = 1;
-		else if(temp >= 0 && temp < 5 )	// 0C
+		else if(temp  < 5 )	// 0C
 			score = 2;
-		else if(temp >= 5 && temp < 10)	// 5C
+		else if(temp  < 10)	// 5C
 			score = 5;
-		else if(temp >= 10 && temp < 15)	// 10C
+		else if(temp  < 15)	// 10C
 			score = 7;
-		else if(temp >= 15 && temp < 20) // 15C
+		else if(temp  < 20) // 15C
 			score = 9;
-		else if(temp >= 20 && temp < 25) // 20C
+		else if(temp  < 25) // 20C
 			score = 10;
-		else if(temp >= 25 && temp < 30) // 25C
+		else if(temp  < 30) // 25C
 			score = 8;
-		else if(temp >= 30 && temp < 35) // 30C
+		else if(temp  < 35) // 30C
 			score = 5;
 		else if(temp >= 35) // 35C
 			score = 1;
