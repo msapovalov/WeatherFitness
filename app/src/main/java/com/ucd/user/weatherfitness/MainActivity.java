@@ -9,9 +9,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ucd.user.weatherfitness.model.FetchWeatherTask;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
