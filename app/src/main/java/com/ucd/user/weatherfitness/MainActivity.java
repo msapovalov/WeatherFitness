@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
-                MainActivity.this.startActivity(newIntent);
+                MainActivity.this.startActivityForResult(newIntent, 1);
             }
         });
 
@@ -80,6 +80,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                String returnValue = data.getStringExtra("lat");
+                String returnValue2 = data.getStringExtra("lng");
+
+                TextView score_id = findViewById(R.id.score_ID);
+                FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+                weatherTask.execute(returnValue, returnValue2);
+
+            }
+        }
+    }
+//
     public void onClick_StartNow() {
         Calendar cal = Calendar.getInstance();
         //Date in simpleformat
