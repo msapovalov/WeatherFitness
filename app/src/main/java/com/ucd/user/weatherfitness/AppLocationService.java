@@ -43,6 +43,8 @@ public class AppLocationService extends Service implements LocationListener {
      }
  @Override
  public void onLocationChanged(Location location) {
+     double latitude = location.getLatitude();
+     double longitude = location.getLongitude();
  }
 
  @Override

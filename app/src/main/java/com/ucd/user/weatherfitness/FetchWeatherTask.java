@@ -1,12 +1,10 @@
-package com.ucd.user.weatherfitness.model;
+package com.ucd.user.weatherfitness;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.TextView;
-
-import com.ucd.user.weatherfitness.Score;
 
 import org.json.JSONArray;
 import org.json.JSONException;
