@@ -9,13 +9,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -25,8 +26,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-
-
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
     String lng = "-6";
     String lat = "53";
+    public static int score = 0;
+    public static double wind = 0;
+    public static String precipitation = " ";
+    public static double temperature = 0;
+    public static double pressure = 0;
+    private ViewFlipper vf;
+    private  float lastX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-                                Log.d("LocationtoString", location.toString());
-                                lng = String.valueOf(location.getLongitude());
-                                lat = String.valueOf(location.getLatitude());
+                                //Log.d("LocationtoString", location.toString());
+                                //lng = String.valueOf(location.getLongitude());
+                                //lat = String.valueOf(location.getLatitude());
                                 Toast toast = Toast.makeText(MainActivity.this,"location added",Toast.LENGTH_SHORT);
                                 toast.show();
                                 // Got last known location. In some rare situations this can be null.
@@ -64,12 +71,26 @@ public class MainActivity extends AppCompatActivity {
                                     // Logic to handle location object
                                 }
                             }});
+        //Flipper code
+        vf = (ViewFlipper) findViewById(R.id.myflipper);
+
 
         //current weather implementation code
-        TextView score_id = findViewById(R.id.score_ID);
+        TextView score_id = findViewById(R.id.location_view);
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
-        //hardcoded to Wicklow
-        weatherTask.execute(lat,lng);
+        // Waiting on async task dangerous
+        try {
+            weatherTask.execute(lat,lng).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        TextView iscore = findViewById(R.id.score_ID);
+        String strscore = "SCORE     "+ score;
+        iscore.setText(strscore);
+
         try {
             Double latitude = Double.parseDouble(lat);
             Double longtitude = Double.parseDouble(lng);
@@ -79,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             String address = addressList.get(0).getLocality();
 
             location = String.valueOf(address);
+
         }
         catch (IOException e){
             throw new RuntimeException(e);
@@ -162,18 +184,7 @@ public class MainActivity extends AppCompatActivity {
         //Date in simpleformat
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strtimestamp =format1.format(cal.getTime());
-         /// need to implement this method
-        String score = "5"; //score algorithm (Sam)
-        //We need to parse through openweathermap json and get these values, same passed to score algorithm
-        //possibly modify FetchWeatherClass?
-        String wind = "10 m/s";
-        String precipitation = "snow";
-        String temperature = "10";
-        String pressure = "1007";
-        String lat = "53.305344";
-        String lon = "-6.220654";
-
-        myDb.insertRow(strtimestamp,location, score, wind, precipitation, temperature, pressure, lat, lon);
+        myDb.insertRow(strtimestamp,location, String.valueOf(score), String.valueOf(wind), precipitation, String.valueOf(temperature), String.valueOf(pressure), lat, lng);
         Toast.makeText(getApplicationContext(), "Your activity have been added to Database", Toast.LENGTH_SHORT).show();
     }
 
@@ -195,6 +206,53 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Method to handle touch event like left to right swap and right to left swap
+    public boolean onTouchEvent(MotionEvent touchevent)
+    {
+        switch (touchevent.getAction())
+        {
+            // when user first touches the screen to swap
+            case MotionEvent.ACTION_DOWN:
+            {
+                lastX = touchevent.getX();
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            {
+                float currentX = touchevent.getX();
+
+                // if left to right swipe on screen
+                if (lastX < currentX)
+                {
+                    // If no more View/Child to flip
+                    if (vf.getDisplayedChild() == 0)
+                        break;
+
+                    // set the required Animation type to ViewFlipper
+                    // The Next screen will come in form Left and current Screen will go OUT from Right
+                    vf.setInAnimation(this, R.anim.in_from_left);
+                   vf.setOutAnimation(this, R.anim.out_to_right);
+                    // Show the next Screen
+                    vf.showNext();
+                }
+
+                // if right to left swipe on screen
+                if (lastX > currentX)
+                {
+                    if (vf.getDisplayedChild() == 1)
+                        break;
+                    // set the required Animation type to ViewFlipper
+                    // The Next screen will come in form Right and current Screen will go OUT from Left
+                    vf.setInAnimation(this, R.anim.in_from_right);
+                    vf.setOutAnimation(this, R.anim.out_to_left);
+                    // Show The Previous Screen
+                    vf.showPrevious();
+                }
+                break;
+            }
+        }
+        return false;
+    }
 }
 
 ///

@@ -145,6 +145,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             Log.d("Wind", String.valueOf(Math.round(speed)));
             Log.d("Humidity", String.valueOf(Math.round(humidity)));
 
+            MainActivity.precipitation = description;
+            MainActivity.pressure = pressure;
+            MainActivity.wind = speed;
+            MainActivity.temperature = daytemp;
+            MainActivity.score = iscore;
+
             //added math.round to weather
             resultStrs[i] = day + description + Math.round(daytemp)+ Math.round(pressure) + humidity + Math.round(speed) + iscore;
         }
