@@ -6,23 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.format.Time;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
-import com.ucd.user.weatherfitness.model.FetchWeatherTask;
-
-
-import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -134,7 +118,7 @@ public class DBAdapter {
         return db.delete(DATABASE_TABLE, where, null) != 0;
     }
 
-    public void deleteAll() {
+    public Cursor deleteAll() {
         Cursor c = getAllRows();
         long rowId = c.getColumnIndexOrThrow(KEY_ROWID);
         if (c.moveToFirst()) {
@@ -143,13 +127,12 @@ public class DBAdapter {
             } while (c.moveToNext());
         }
         c.close();
+        return c;
     }
 
     //select all
     public Cursor getAllRows() {
-        String where = null;
         Cursor c = db.rawQuery("SELECT * FROM weather", null);
-        //Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
             if (c != null) {
                 c.moveToFirst();
             }
