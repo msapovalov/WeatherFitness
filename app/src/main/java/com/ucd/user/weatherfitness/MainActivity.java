@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //sqllite methods
+    //sqllite methods//
 
     public void openDB(){
         myDb = new DBAdapter(this);
