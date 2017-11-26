@@ -1,6 +1,8 @@
 package com.ucd.user.weatherfitness;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -48,13 +50,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng latlng= new LatLng (address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latlng).title("Marker on Search"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latlng));
+            float zoomLevel = 16.0f; //This goes up to 21
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel));
         }
+    }
+
+    public void onSave(View view)throws IOException{
+        EditText location_tf = (EditText) findViewById(R.id.address);
+        String location = location_tf.getText().toString();
+        Geocoder geo = new Geocoder(this);
+        List<Address> addressList = geo.getFromLocationName(location, 1);
+        Address address = addressList.get(0);
+
+        Intent resultIntent = new Intent();
+        // TODO Add extras or a data URI to this intent as appropriate.
+        String lat = Double.toString(address.getLatitude());
+        String lng = Double.toString(address.getLongitude());
+        resultIntent.putExtra("lat", lat);
+        resultIntent.putExtra("lng", lng);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
