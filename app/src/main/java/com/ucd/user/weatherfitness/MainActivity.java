@@ -3,6 +3,7 @@ package com.ucd.user.weatherfitness;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -165,6 +166,15 @@ public class MainActivity extends AppCompatActivity {
                 TextView iscore = findViewById(R.id.score_ID);
                 String strscore = "SCORE     "+ score;
                 iscore.setText(strscore);
+                if (score <= 4) {
+                    iscore.setTextColor(Color.RED);
+                }
+                else if  (score <= 7) {
+                    iscore.setTextColor(Color.BLUE);
+                }
+                else {
+                        iscore.setTextColor(Color.GREEN);
+                    }
 
             }
         }

@@ -25,7 +25,7 @@
     <ViewFlipper
         android:id="@+id/myflipper"
         android:layout_width="0dp"
-        android:layout_height="172dp"
+        android:layout_height="220dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:visibility="visible"

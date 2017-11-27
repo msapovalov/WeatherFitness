@@ -39,8 +39,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/TextViewScore"
         app:layout_constraintStart_toEndOf="@+id/TextViewDate"
-        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
-        tools:text="Location" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
 
     <TextView
         android:id="@+id/TextViewScore"
