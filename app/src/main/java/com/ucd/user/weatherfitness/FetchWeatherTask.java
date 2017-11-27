@@ -50,7 +50,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // For presentation, assume the user doesn't care about tenths of a degree.
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
-
         String highLowStr = roundedHigh + "/" + roundedLow;
         return highLowStr;
     }
@@ -77,6 +76,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         final String OWM_WIND = "speed";
         final String OWM_PRESSURE = "pressure";
         final String OWM_HUMIDITY = "humidity";
+        final String OWM_CITY = "city";
+        final String OWM_NAME = "name";
 
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
@@ -125,6 +126,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
             description = weatherObject.getString(OWM_DESCRIPTION);
 
+            JSONObject cityObject = forecastJson.getJSONObject(OWM_CITY);
+            String name = cityObject.getString(OWM_NAME);
             // Temperatures are in a child object called "temp".  Try not to name variables
             // "temp" when working with temperature.  It confuses everybody.
 
@@ -150,6 +153,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             MainActivity.wind = speed;
             MainActivity.temperature = daytemp;
             MainActivity.score = iscore;
+            MainActivity.locationfromfetch = name;
 
             //added math.round to weather
             results = new String[]{day, description, String.valueOf(Math.round(daytemp)), String.valueOf(Math.round(pressure)), String.valueOf(humidity), String.valueOf(Math.round(speed)), String.valueOf(iscore)};

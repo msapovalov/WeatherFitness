@@ -7,46 +7,15 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/HeaderID"
-        android:layout_width="13dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="center"
-        android:textStyle="bold|italic"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/TextViewID"
-        app:layout_constraintEnd_toStartOf="@+id/HeaderDate"
-        app:layout_constraintStart_toEndOf="@+id/itemlayoutlist"
-        app:layout_constraintTop_toBottomOf="@+id/itemlayoutlist"
-        tools:text="ID" />
-
-    <TextView
         android:id="@+id/TextViewID"
         android:layout_width="15dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:text="ID"
-        android:textAlignment="center"
-        android:textStyle="italic"
+        android:layout_marginStart="8dp"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toStartOf="@+id/TextViewDate"
         app:layout_constraintStart_toEndOf="@+id/itemlayoutlist"
-        app:layout_constraintTop_toBottomOf="@+id/HeaderID" />
-
-    <TextView
-        android:id="@+id/HeaderDate"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/TextViewDate"
-        app:layout_constraintEnd_toStartOf="@+id/HeaderLocation"
-        app:layout_constraintStart_toEndOf="@+id/HeaderID"
-        tools:text="DateTime" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
 
     <TextView
         android:id="@+id/TextViewDate"
@@ -54,26 +23,12 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="DateTime"
         android:textAlignment="center"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/TextViewLocation"
         app:layout_constraintStart_toEndOf="@+id/TextViewID"
-        app:layout_constraintTop_toBottomOf="@+id/HeaderLocation" />
-
-    <TextView
-        android:id="@+id/HeaderLocation"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textAlignment="textStart"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/TextViewLocation"
-        app:layout_constraintEnd_toStartOf="@+id/HeaderScore"
-        app:layout_constraintStart_toEndOf="@+id/HeaderDate"
-        app:layout_constraintTop_toTopOf="@+id/itemlayoutlist"
-        tools:text="Location" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
+        tools:layout_editor_absoluteY="19dp" />
 
     <TextView
         android:id="@+id/TextViewLocation"
@@ -85,22 +40,9 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/TextViewScore"
         app:layout_constraintStart_toEndOf="@+id/TextViewDate"
-        app:layout_constraintTop_toBottomOf="@+id/HeaderLocation"
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
+        tools:layout_editor_absoluteY="19dp"
         tools:text="Location" />
-
-    <TextView
-        android:id="@+id/HeaderScore"
-        android:layout_width="37dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textAlignment="viewStart"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/TextViewScore"
-        app:layout_constraintEnd_toStartOf="@+id/itemlayoutlist"
-        app:layout_constraintStart_toEndOf="@+id/HeaderLocation"
-        tools:text="Score" />
 
     <TextView
         android:id="@+id/TextViewScore"
@@ -111,5 +53,5 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/itemlayoutlist"
         app:layout_constraintStart_toEndOf="@+id/TextViewLocation"
-        app:layout_constraintTop_toBottomOf="@+id/HeaderScore" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
 </android.support.constraint.ConstraintLayout>

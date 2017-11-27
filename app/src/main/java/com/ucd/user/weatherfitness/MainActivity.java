@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     //db vars
     public DBAdapter myDb;
-    String location = " ";
+    public static String locationfromfetch = " ";
     private FusedLocationProviderClient mFusedLocationClient;
     String lng = "-6";
     String lat = "53";
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static double pressure = 0;
     private ViewFlipper vf;
     private  float lastX;
+    String location = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -91,20 +92,20 @@ public class MainActivity extends AppCompatActivity {
         String strscore = "SCORE     "+ score;
         iscore.setText(strscore);
 
-        try {
-            Double latitude = Double.parseDouble(lat);
-            Double longtitude = Double.parseDouble(lng);
+        //try {
+          //  Double latitude = Double.parseDouble(lat);
+            //Double longtitude = Double.parseDouble(lng);
 
-            Geocoder geo = new Geocoder(this);
-            List<Address> addressList = geo.getFromLocation(latitude, longtitude, 1);
-            String address = addressList.get(0).getLocality();
+//            Geocoder geo = new Geocoder(this);
+  //          List<Address> addressList = geo.getFromLocation(latitude, longtitude, 1);
+    //        String address = addressList.get(0).getFeatureName();
 
-            location = String.valueOf(address);
+//            location = String.valueOf(address);
 
-        }
-        catch (IOException e){
-            throw new RuntimeException(e);
-        }
+//        }
+  //      catch (IOException e){
+    //        throw new RuntimeException(e);
+      //  }
 
         //sqlite db implementation
         openDB();
@@ -166,8 +167,9 @@ public class MainActivity extends AppCompatActivity {
                 // The Intent's data Uri identifies which contact was selected.
                 String returnValue = data.getStringExtra("lat");
                 String returnValue2 = data.getStringExtra("lng");
-                String returnValue3 = data.getStringExtra("address");
-                location = returnValue3;
+
+                //location = String.valueOf(address);
+                location = data.getStringExtra("location");
 
                 TextView score_id = findViewById(R.id.location_view);
                 FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
@@ -190,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         //Date in simpleformat
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String strtimestamp =format1.format(cal.getTime());
-        myDb.insertRow(strtimestamp,location, String.valueOf(score), String.valueOf(wind), precipitation, String.valueOf(temperature), String.valueOf(pressure), lat, lng);
+        myDb.insertRow(strtimestamp,locationfromfetch, String.valueOf(score), String.valueOf(wind), precipitation, String.valueOf(temperature), String.valueOf(pressure), lat, lng);
         Toast.makeText(getApplicationContext(), "Your activity have been added to Database", Toast.LENGTH_SHORT).show();
     }
 
