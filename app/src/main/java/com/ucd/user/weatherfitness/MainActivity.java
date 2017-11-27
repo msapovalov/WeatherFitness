@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                TextView iscore = findViewById(R.id.score_ID);
+                String strscore = "SCORE     "+ score;
+                iscore.setText(strscore);
 
             }
         }
