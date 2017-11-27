@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemlayoutlist"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/TextViewID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_width="25dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="2dp"
+        android:text="10"
+        android:textAlignment="textStart"
+        android:textStyle="italic"
         app:layout_constraintEnd_toStartOf="@+id/TextViewDate"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/TextViewDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="TextView"
+        android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/TextViewLocation"
         app:layout_constraintStart_toEndOf="@+id/TextViewID"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/TextViewLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="230dp"
+        android:layout_height="0dp"
         android:text="TextView"
+        android:textAlignment="textStart"
         app:layout_constraintBaseline_toBaselineOf="@+id/TextViewDate"
         app:layout_constraintEnd_toStartOf="@+id/TextViewScore"
         app:layout_constraintStart_toEndOf="@+id/TextViewDate" />
 
     <TextView
         android:id="@+id/TextViewScore"
-        android:layout_width="wrap_content"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginEnd="2dp"
+        android:text="5"
+        android:textAlignment="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/TextViewLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/TextViewLocation" />
