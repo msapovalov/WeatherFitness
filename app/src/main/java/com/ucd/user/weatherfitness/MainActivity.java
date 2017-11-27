@@ -48,42 +48,42 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
         }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                //Log.d("LocationtoString", location.toString());
-                                //lng = String.valueOf(location.getLongitude());
-                                //lat = String.valueOf(location.getLatitude());
-                                Toast toast = Toast.makeText(MainActivity.this,"location added",Toast.LENGTH_SHORT);
+        else {
+
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            Toast toast = Toast.makeText(MainActivity.this, "last location exist", Toast.LENGTH_SHORT);
+                            toast.show();
+                            // Got last known location. In some rare situations this can be null.
+                            if (location == null) {
+                                toast = Toast.makeText(MainActivity.this, "But it`s null", Toast.LENGTH_SHORT);
                                 toast.show();
-                                // Got last known location. In some rare situations this can be null.
-                                if (location == null) {
-                                    toast = Toast.makeText(MainActivity.this,"location null",Toast.LENGTH_SHORT);
-                                    toast.show();
-                                    // Logic to handle location object
-                                }
-                            }});
-        //Flipper code
-        vf = (ViewFlipper) findViewById(R.id.myflipper);
+                                // Logic to handle location object
+                            }
+                        }
+                    });
+            //Flipper code
+        }
+        //set activity view
+        setContentView(R.layout.activity_main);
 
+        //create flipper view
+        vf = findViewById(R.id.myflipper);
 
-        //current weather implementation code
+        //try to fetch current weather and calculate score
         TextView score_id = findViewById(R.id.location_view);
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
         // Waiting on async task dangerous
         try {
             weatherTask.execute(lat,lng).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -151,15 +150,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-    //sqllite methods//
-
+    //Sqllite method to open connection to db//
     public void openDB(){
         myDb = new DBAdapter(this);
         myDb.open();
-        //myDb.deleteAll();
-
     }
+
+    //return from Map Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
         if (requestCode == 1) {
@@ -171,13 +168,12 @@ public class MainActivity extends AppCompatActivity {
                 String returnValue2 = data.getStringExtra("lng");
                 String returnValue3 = data.getStringExtra("address");
                 location = returnValue3;
+
                 TextView score_id = findViewById(R.id.location_view);
                 FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
                 try {
                     weatherTask.execute(returnValue, returnValue2).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
 
@@ -192,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClick_StartNow() {
         Calendar cal = Calendar.getInstance();
         //Date in simpleformat
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String strtimestamp =format1.format(cal.getTime());
         myDb.insertRow(strtimestamp,location, String.valueOf(score), String.valueOf(wind), precipitation, String.valueOf(temperature), String.valueOf(pressure), lat, lng);
         Toast.makeText(getApplicationContext(), "Your activity have been added to Database", Toast.LENGTH_SHORT).show();

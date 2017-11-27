@@ -50,7 +50,7 @@ public class DBAdapter {
 
     public static final String DATABASE_NAME = "db";
     public static final String DATABASE_TABLE = "weather";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     //SQL Statement to create DB
 
@@ -59,7 +59,7 @@ public class DBAdapter {
             + " ("
             + KEY_ROWID + " integer primary key autoincrement, "
             + KEY_DATETIME + " text, "
-            + KEY_LOCATION + " text not null, "
+            + KEY_LOCATION + " text, "
             + KEY_LAT + " text not null, "
             + KEY_LON + " text not null, "
             + KEY_WIND + " text not null, "
