@@ -102,7 +102,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         String[] results = new String[0];
         for (int i = 0; i < weatherArray.length(); i++) {
-            // For now, using the format "Day, description, hi/low"
             String day;
             String description;
             double pressure;
@@ -156,7 +155,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             MainActivity.locationfromfetch = name;
 
             //added math.round to weather
-            results = new String[]{day, description, String.valueOf(Math.round(daytemp)), String.valueOf(Math.round(pressure)), String.valueOf(humidity), String.valueOf(Math.round(speed)), String.valueOf(iscore)};
+            results = new String[]{day, description, String.valueOf(Math.round(daytemp)), String.valueOf(Math.round(pressure)), String.valueOf(humidity), String.valueOf(Math.round(speed)), String.valueOf(iscore),name};
         }
         return results;
 
@@ -292,6 +291,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         if (results != null) {
             //TextView score_id = (TextView)findViewById(R.id.score_ID);
             String strDate = "Date: " + results[0];
+            String strName = "Location name: " + results[7];
             String strDescription = "Precipitation: " + results[1];
             String strTemp = "Average temp: " + results[2];
             String strPressure = "Pressure: " + results[3];
@@ -299,7 +299,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             String strWind = "Wind speed: " + results[5] + " m/sec";
             String strScore = "Score: " + results[6];
 
-            String allValues = strDate + System.lineSeparator() + strDescription + System.lineSeparator() + strTemp
+            String allValues = strDate + System.lineSeparator() + strName+ System.lineSeparator() + strDescription + System.lineSeparator() + strTemp
                     + System.lineSeparator() + strPressure + System.lineSeparator() + strHumidity + System.lineSeparator() +
                     strWind + System.lineSeparator() + strScore;
 

@@ -66,7 +66,7 @@
             android:labelFor="@+id/location_view"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
