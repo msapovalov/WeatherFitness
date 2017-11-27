@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/TextViewDate"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -27,12 +27,11 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/TextViewLocation"
         app:layout_constraintStart_toEndOf="@+id/TextViewID"
-        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
-        tools:layout_editor_absoluteY="19dp" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
 
     <TextView
         android:id="@+id/TextViewLocation"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -41,7 +40,6 @@
         app:layout_constraintEnd_toStartOf="@+id/TextViewScore"
         app:layout_constraintStart_toEndOf="@+id/TextViewDate"
         app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
-        tools:layout_editor_absoluteY="19dp"
         tools:text="Location" />
 
     <TextView

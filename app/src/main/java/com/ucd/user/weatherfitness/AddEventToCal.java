@@ -6,12 +6,15 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import java.util.Calendar;
+
+import static com.ucd.user.weatherfitness.MainActivity.locationfromfetch;
 
 /**
  * Created by User on 11/19/2017.
@@ -30,8 +33,8 @@ public class AddEventToCal extends Activity {
         ContentResolver cr = context.getContentResolver();
         ContentValues cv = new ContentValues();
         cv.put(CalendarContract.Events.TITLE, "WeatherFitness");
-        cv.put(CalendarContract.Events.DESCRIPTION, "Description of TestingWeatherEvent1");
-        cv.put(CalendarContract.Events.EVENT_LOCATION, "Location TestingWeatherEvent1");
+        cv.put(CalendarContract.Events.DESCRIPTION, "Event created by WeatherFitness app");
+        cv.put(CalendarContract.Events.EVENT_LOCATION, "Location" + locationfromfetch);
         cv.put(CalendarContract.Events.DTSTART, Calendar.getInstance().getTimeInMillis());
         cv.put(CalendarContract.Events.DTEND, Calendar.getInstance().getTimeInMillis() + 60 * 60 * 1000);
         cv.put(CalendarContract.Events.CALENDAR_ID, "3");

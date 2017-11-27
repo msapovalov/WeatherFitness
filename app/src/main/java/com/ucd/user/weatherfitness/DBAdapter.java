@@ -9,10 +9,6 @@ import android.util.Log;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by Mike on 11/20/2017.
- */
-
 public class DBAdapter {
 
     private static final String LOG_TAG = "DBAdapter"; //logging DB version
@@ -32,19 +28,6 @@ public class DBAdapter {
 
     public final String[] ALL_KEYS = new String[]{KEY_ROWID, KEY_DATETIME, KEY_LOCATION, KEY_SCORE,KEY_WIND, KEY_PRECIPITATION, KEY_TEMPERATURE, KEY_PRESSURE, KEY_LAT, KEY_LON};
 
-
-    //KEY numbers
-
-    public static final int COL_ROWID = 0;
-    public static final int COL_DATETIME = 1;
-    public static final int COL_LOCATION = 2;
-    public static final int COL_SCORE = 3;
-    public static final int COL_WIND = 4;
-    public static final int COL_PRECIPITATION = 5;
-    public static final int COL_TEMPERATURE = 6;
-    public static final int COL_PRESSURE = 7;
-    public static final int COL_LAT = 8;
-    public static final int COL_LON = 9;
 
     //DB info:
 
@@ -141,8 +124,6 @@ public class DBAdapter {
     //select single row
 
     public Cursor getRow(String datetime) {
-        //String where = KEY_DATETIME + " < " + "'" + datetime + "'";
-        //Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
         Cursor c = db.rawQuery("SELECT _id, datetime, location, score FROM weather WHERE datetime > ?", new String[]{datetime});
         if (c != null) {
             c.moveToFirst();

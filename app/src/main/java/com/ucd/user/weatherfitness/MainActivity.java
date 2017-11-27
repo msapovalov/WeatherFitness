@@ -3,8 +3,6 @@ package com.ucd.user.weatherfitness;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -22,10 +20,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 
@@ -34,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     //db vars
     public DBAdapter myDb;
     public static String locationfromfetch = " ";
-    private FusedLocationProviderClient mFusedLocationClient;
+    FusedLocationProviderClient mFusedLocationClient;
     String lng = "-6";
     String lat = "53";
     public static int score = 0;
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            Toast toast = Toast.makeText(MainActivity.this, "last location exist", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(MainActivity.this, "Last location is used", Toast.LENGTH_SHORT);
                             toast.show();
                             // Got last known location. In some rare situations this can be null.
                             if (location == null) {
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-            //Flipper code
+
         }
         //set activity view
         setContentView(R.layout.activity_main);
@@ -81,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         //try to fetch current weather and calculate score
         TextView score_id = findViewById(R.id.location_view);
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+
         // Waiting on async task dangerous
         try {
             weatherTask.execute(lat,lng).get();
@@ -91,21 +89,6 @@ public class MainActivity extends AppCompatActivity {
         TextView iscore = findViewById(R.id.score_ID);
         String strscore = "SCORE     "+ score;
         iscore.setText(strscore);
-
-        //try {
-          //  Double latitude = Double.parseDouble(lat);
-            //Double longtitude = Double.parseDouble(lng);
-
-//            Geocoder geo = new Geocoder(this);
-  //          List<Address> addressList = geo.getFromLocation(latitude, longtitude, 1);
-    //        String address = addressList.get(0).getFeatureName();
-
-//            location = String.valueOf(address);
-
-//        }
-  //      catch (IOException e){
-    //        throw new RuntimeException(e);
-      //  }
 
         //sqlite db implementation
         openDB();
@@ -189,11 +172,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick_StartNow() {
         Calendar cal = Calendar.getInstance();
-        //Date in simpleformat
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        //Date using SimpleDateFormat constructor
+        //added Locale.getDefault so that Date and Time presented in User preferred format.
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         String strtimestamp =format1.format(cal.getTime());
         myDb.insertRow(strtimestamp,locationfromfetch, String.valueOf(score), String.valueOf(wind), precipitation, String.valueOf(temperature), String.valueOf(pressure), lat, lng);
-        Toast.makeText(getApplicationContext(), "Your activity have been added to Database", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Your activity saved to Database", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -205,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
-
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
@@ -214,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Method to handle touch event like left to right swap and right to left swap
+    // Method to handle touch events for flipper like left to right swap and right to left swap
     public boolean onTouchEvent(MotionEvent touchevent)
     {
         switch (touchevent.getAction())
@@ -262,5 +245,3 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 }
-
-///

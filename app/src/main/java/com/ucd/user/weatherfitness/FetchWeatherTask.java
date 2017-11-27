@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
     TextView scoreID;
-    public FetchWeatherTask(TextView scoreID){
+    FetchWeatherTask(TextView scoreID){
         this.scoreID = scoreID;
     }
 
@@ -109,7 +109,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             double speed;
 
 
-            // Get the JSON object representing the day
+            // Get the JSON object representing the day object
             JSONObject dayForecast = weatherArray.getJSONObject(i);
 
             // The date/time is returned as a long.  We need to convert that
@@ -125,27 +125,22 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
             description = weatherObject.getString(OWM_DESCRIPTION);
 
+            //Added Location name object, so we can return it to user screen
             JSONObject cityObject = forecastJson.getJSONObject(OWM_CITY);
             String name = cityObject.getString(OWM_NAME);
+
             // Temperatures are in a child object called "temp".  Try not to name variables
-            // "temp" when working with temperature.  It confuses everybody.
 
             JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
             double daytemp = temperatureObject.getDouble(OWM_DAY);
-            //double high = temperatureObject.getDouble(OWM_MAX);
-            //double low = temperatureObject.getDouble(OWM_MIN);
 
             pressure = dayForecast.getDouble(OWM_PRESSURE);
             humidity = dayForecast.getDouble(OWM_HUMIDITY);
             speed = dayForecast.getDouble(OWM_WIND);
 
+            //calculating the score using our algorithm
             Score score = new Score(description, Math.round(daytemp), Math.round(humidity), Math.round(speed));
             int iscore = score.calculateScore();
-
-            //Log.d("Precip", description);
-            //Log.d("Temp", String.valueOf(Math.round(daytemp)));
-            //Log.d("Wind", String.valueOf(Math.round(speed)));
-            //Log.d("Humidity", String.valueOf(Math.round(humidity)));
 
             MainActivity.precipitation = description;
             MainActivity.pressure = pressure;
@@ -154,13 +149,15 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             MainActivity.score = iscore;
             MainActivity.locationfromfetch = name;
 
-            //added math.round to weather
+            //added math.round to some weather dimensions
             results = new String[]{day, description, String.valueOf(Math.round(daytemp)), String.valueOf(Math.round(pressure)), String.valueOf(humidity), String.valueOf(Math.round(speed)), String.valueOf(iscore),name};
         }
         return results;
-
     }
 
+
+    //This WEB REQUEST is based 16 day forecast API http://openweathermap.org/forecast16
+    //If we want to provide forecast for each 3 hours, we might need to create another class
 
     @Override
     protected String[] doInBackground(String... params) {
@@ -213,6 +210,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
             Log.v(LOG_TAG, "Built URI " + builtUri.toString());
 
+            //raw url
             //URL url = new URL("http://http://api.openweathermap.org/data/2.5/forecast/daily?id=524901&mode=json&units=metric&ctn=7");
 
             // Create the request to OpenWeatherMap, and open the connection
@@ -224,15 +222,16 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             InputStream inputStream = urlConnection.getInputStream();
             forecastJsonStr = readStream(inputStream);
 
-            //forecastJsonStr="{\"city\":{\"id\":7778677,\"name\":\"Dublin City\",\"coord\":{\"lon\":-6.24922,\"lat\":53.355122},\"country\":\"IE\",\"population\":0},\"cod\":\"200\",\"message\":0.0199,\"cnt\":7,\"list\":[{\"dt\":1444564800,\"temp\":{\"day\":11.14,\"min\":10.77,\"max\":12.46,\"night\":12.46,\"eve\":11.96,\"morn\":10.77},\"pressure\":1025.62,\"humidity\":100,\"weather\":[{\"id\":803,\"main\":\"Clouds\",\"description\":\"broken clouds\",\"icon\":\"04d\"}],\"speed\":4.35,\"deg\":100,\"clouds\":80},{\"dt\":1444651200,\"temp\":{\"day\":12.05,\"min\":11.13,\"max\":12.85,\"night\":12.04,\"eve\":12.63,\"morn\":11.25},\"pressure\":1032.62,\"humidity\":100,\"weather\":[{\"id\":800,\"main\":\"Clear\",\"description\":\"sky is clear\",\"icon\":\"02d\"}],\"speed\":8.61,\"deg\":358,\"clouds\":8},{\"dt\":1444737600,\"temp\":{\"day\":12.37,\"min\":11.97,\"max\":12.39,\"night\":12.02,\"eve\":12.1,\"morn\":12.24},\"pressure\":1036.05,\"humidity\":100,\"weather\":[{\"id\":803,\"main\":\"Clouds\",\"description\":\"broken clouds\",\"icon\":\"04d\"}],\"speed\":5.61,\"deg\":50,\"clouds\":64},{\"dt\":1444824000,\"temp\":{\"day\":11.23,\"min\":8.95,\"max\":11.23,\"night\":9.86,\"eve\":10.99,\"morn\":8.95},\"pressure\":1036.52,\"humidity\":0,\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10d\"}],\"speed\":6.35,\"deg\":131,\"clouds\":0},{\"dt\":1444910400,\"temp\":{\"day\":12.47,\"min\":8.78,\"max\":12.47,\"night\":10.21,\"eve\":11.44,\"morn\":8.78},\"pressure\":1036.04,\"humidity\":0,\"weather\":[{\"id\":800,\"main\":\"Clear\",\"description\":\"sky is clear\",\"icon\":\"01d\"}],\"speed\":5.45,\"deg\":50,\"clouds\":0},{\"dt\":1444996800,\"temp\":{\"day\":12.96,\"min\":9.26,\"max\":12.96,\"night\":9.26,\"eve\":11.74,\"morn\":9.78},\"pressure\":1033.93,\"humidity\":0,\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10d\"}],\"speed\":3.5,\"deg\":7,\"clouds\":2},{\"dt\":1445083200,\"temp\":{\"day\":12.68,\"min\":8.32,\"max\":12.68,\"night\":9.12,\"eve\":11.59,\"morn\":8.32},\"pressure\":1033.53,\"humidity\":0,\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10d\"}],\"speed\":1.86,\"deg\":342,\"clouds\":3}]}";
+            //Printing output JSON to LOG.d
 
             Log.v(LOG_TAG, "Forecast JSON String: " + forecastJsonStr);
 
         }
         catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
+            // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
+            //Need to inform the user about failed connection to openweathermap.org
             return null;
         }
 
@@ -256,10 +255,9 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             e.printStackTrace();
         }
 
-        // This will only happen if there was an error getting or parsing the forecast.
+        // This will only happen if there was an error getting or parsing the JSON object.
         return null;
     }
-
 
     private String readStream(InputStream in) {
         BufferedReader reader = null;
@@ -299,6 +297,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             String strWind = "Wind speed: " + results[5] + " m/sec";
             String strScore = "Score: " + results[6];
 
+            //Forming an output which will show in TextView in main activity
             String allValues = strDate + System.lineSeparator() + strName+ System.lineSeparator() + strDescription + System.lineSeparator() + strTemp
                     + System.lineSeparator() + strPressure + System.lineSeparator() + strHumidity + System.lineSeparator() +
                     strWind + System.lineSeparator() + strScore;
