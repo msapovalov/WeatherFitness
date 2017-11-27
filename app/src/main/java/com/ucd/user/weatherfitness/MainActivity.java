@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 String returnValue2 = data.getStringExtra("lng");
                 String returnValue3 = data.getStringExtra("address");
                 location = returnValue3;
-                TextView score_id = findViewById(R.id.score_ID);
+                TextView score_id = findViewById(R.id.location_view);
                 FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
                 try {
                     weatherTask.execute(returnValue, returnValue2).get();
