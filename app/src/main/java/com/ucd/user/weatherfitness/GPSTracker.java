@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
 
 public class GPSTracker extends Service implements LocationListener{
 
@@ -125,9 +124,9 @@ public class GPSTracker extends Service implements LocationListener{
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
-        alertDialog.setTitle("GPS is settings");
+        alertDialog.setTitle("GPS settings");
 
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+        alertDialog.setMessage("GPS is not enabled and app will not work properly. Do you want to go to Settings menu and enable it?");
 
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 

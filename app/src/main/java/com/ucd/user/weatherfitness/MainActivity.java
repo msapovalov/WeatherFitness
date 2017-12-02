@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -229,12 +228,6 @@ public class MainActivity extends AppCompatActivity {
         myDb.open();
     }
 
-    protected void onResume()
-    {
-        super.onResume();
-        Log.d("Service message","Application resumed");
-
-    }
 
     //return from Map Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

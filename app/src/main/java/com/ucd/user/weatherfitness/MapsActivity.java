@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -61,34 +62,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel));
         }
         else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder
-                    .setTitle("Current location will be used")
-                    .setMessage("Are you sure?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                onSave(findViewById(R.id.map));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                      dialog.dismiss();
-                    }})						//Do nothing on no
-                    .show();
-
-           // Toast.makeText(getApplicationContext(), "Please select location", Toast.LENGTH_SHORT).show();
+             Toast.makeText(getApplicationContext(), "Please select location", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void onSave(View view) throws IOException {
         EditText location_tf = (EditText) findViewById(R.id.address);
-        String location = location_tf.getText().toString();
-        if (location.equals("")) {
+        final String location = location_tf.getText().toString();
+        if (!TextUtils.isEmpty(location)) {
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
             String lat = Double.toString(gps.getLatitude());
@@ -103,23 +84,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             resultIntent.putExtra("location",address);
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
-        }
-        else{
-            Geocoder geo = new Geocoder(this);
-            List<Address> addressList = geo.getFromLocationName(location, 1);
-            Address address = addressList.get(0);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setTitle("Current location will be used")
+                    .setMessage("Are you sure?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Geocoder geo = new Geocoder(getApplicationContext());
+                            List<Address> addressList = null;
+                            try {
+                                addressList = geo.getFromLocationName(location, 1);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            Address address = addressList.get(0);
 
-            Intent resultIntent = new Intent();
-            // TODO Add extras or a data URI to this intent as appropriate.
-            String lat = Double.toString(address.getLatitude());
-            String lng = Double.toString(address.getLongitude());
-            resultIntent.putExtra("lat", lat);
-            resultIntent.putExtra("lng", lng);
-            resultIntent.putExtra("location",location );
+                            Intent resultIntent = new Intent();
+                            // TODO Add extras or a data URI to this intent as appropriate.
+                            String lat = Double.toString(address.getLatitude());
+                            String lng = Double.toString(address.getLongitude());
+                            resultIntent.putExtra("lat", lat);
+                            resultIntent.putExtra("lng", lng);
+                            resultIntent.putExtra("location", location);
 
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
-    }}
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })                        //Do nothing on no
+                    .show();
+        }}
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
