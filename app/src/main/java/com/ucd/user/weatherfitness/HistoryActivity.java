@@ -24,8 +24,8 @@ public class HistoryActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new TabAll(), "All Activities");
-        adapter.addFragment(new TabWeek(), "Current Week");
-        adapter.addFragment(new TabMonth(),"Current Month");
+        adapter.addFragment(new TabWeek(), "Last 7 days");
+        adapter.addFragment(new TabMonth(),"Last 30 days");
         viewPager.setAdapter(adapter);
 
     }

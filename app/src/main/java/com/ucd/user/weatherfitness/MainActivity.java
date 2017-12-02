@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     //db vars
     public DBAdapter myDb;
     public static String locationfromfetch = " ";
-    String lng = "";
-    String lat = " ";
+    public String lng = "";
+    public String lat = " ";
     public static int score = 0;
     public static double wind = 0;
     public static String precipitation = " ";
@@ -60,10 +61,11 @@ public class MainActivity extends AppCompatActivity {
             if (gps.canGetLocation()) {
                 lat = String.valueOf(gps.getLatitude());
                 lng = String.valueOf(gps.getLongitude());
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Your Location is -\nLat: " + lat + "\nLong: "
-                                + lng, Toast.LENGTH_LONG).show();
+                //toast for troubleshooting purposes
+                //Toast.makeText(
+                  //      getApplicationContext(),
+                    //    "Your Location is -\nLat: " + lat + "\nLong: "
+                      //          + lng, Toast.LENGTH_LONG).show();
 
                 //create flipper view
                 vf = findViewById(R.id.myflipper);
@@ -148,10 +150,11 @@ public class MainActivity extends AppCompatActivity {
                     if (gps.canGetLocation()) {
                         lat = String.valueOf(gps.getLatitude());
                         lng = String.valueOf(gps.getLongitude());
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Your Location is -\nLat: " + lat + "\nLong: "
-                                        + lng, Toast.LENGTH_LONG).show();
+                        //Test toast for tests
+                        // Toast.makeText(
+                          //      getApplicationContext(),
+                            //    "Your Location is -\nLat: " + lat + "\nLong: "
+                              //          + lng, Toast.LENGTH_LONG).show();
 
                     //create flipper view
                     vf = findViewById(R.id.myflipper);
@@ -229,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume()
     {
         super.onResume();
-        Toast.makeText(getApplicationContext(), "Application crashed. Please inform us about the problem", Toast.LENGTH_SHORT).show();
+        Log.d("Service message","Application resumed");
 
     }
 
