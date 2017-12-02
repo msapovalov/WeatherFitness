@@ -48,7 +48,86 @@ public class MainActivity extends AppCompatActivity {
 
         if (!gpsPermission.checkLocationPermission()) {
             gpsPermission.requestPermissionForLocation(GPSPermission.LOCATION_PERMISSION_REQUEST_CODE);
-        }}
+        }
+        else
+        {
+            //open database
+            openDB();
+
+            //Get GPS location
+            gps = new GPSTracker(MainActivity.this);
+            if (gps.canGetLocation()) {
+                lat = String.valueOf(gps.getLatitude());
+                lng = String.valueOf(gps.getLongitude());
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Your Location is -\nLat: " + lat + "\nLong: "
+                                + lng, Toast.LENGTH_LONG).show();
+
+                //create flipper view
+                vf = findViewById(R.id.myflipper);
+
+                //try to fetch current weather and calculate score
+                TextView score_id = findViewById(R.id.location_view);
+                FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+
+                // Waiting on async task dangerous
+                try {
+                    weatherTask.execute(lat, lng).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                TextView iscore = findViewById(R.id.score_ID);
+                String strscore = "SCORE     " + score;
+                iscore.setText(strscore);
+
+                //main activity buttons
+                Button btn = findViewById(R.id.button1);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
+                        MainActivity.this.startActivityForResult(newIntent, 1);
+                    }
+                });
+
+                Button btn1 = findViewById(R.id.button2);
+                btn1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AddEventToCal objEvent = new AddEventToCal(MainActivity.this);
+                        try {
+                            objEvent.AddEvent(MainActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Button btn2 = findViewById(R.id.button3);
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.this.onClick_StartNow();
+                    }
+                });
+
+                Button btn3 = findViewById(R.id.button4);
+                btn3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                        MainActivity.this.startActivity(newIntent);
+                    }
+                });
+            }
+            else {
+                gps.showSettingsAlert(); //show alert and ask user to turn location on
+            }
+        }
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
