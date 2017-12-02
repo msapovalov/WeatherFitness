@@ -52,8 +52,6 @@ public class DBAdapter {
             + KEY_SCORE + " text"
             + ");";
 
-
-
     private final Context context;
     private DatabaseHelper myDBHelper;
     private SQLiteDatabase db;

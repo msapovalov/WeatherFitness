@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -16,10 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,9 +30,8 @@ public class MainActivity extends AppCompatActivity {
     //db vars
     public DBAdapter myDb;
     public static String locationfromfetch = " ";
-    FusedLocationProviderClient mFusedLocationClient;
-    String lng = "-6";
-    String lat = "53";
+    String lng = "";
+    String lat = " ";
     public static int score = 0;
     public static double wind = 0;
     public static String precipitation = " ";
@@ -43,33 +40,31 @@ public class MainActivity extends AppCompatActivity {
     private ViewFlipper vf;
     private  float lastX;
     String location = "";
+    GPSTracker gps;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
-        }
-        else {
 
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            Toast toast = Toast.makeText(MainActivity.this, "Last location is used", Toast.LENGTH_SHORT);
-                            toast.show();
-                            // Got last known location. In some rare situations this can be null.
-                            if (location == null) {
-                                toast = Toast.makeText(MainActivity.this, "But it`s null", Toast.LENGTH_SHORT);
-                                toast.show();
-                                // Logic to handle location object
-                            }
-                        }
-                    });
-
+        if(isPermissionGranted())
+        {
+            //Get GPS location
+            gps = new GPSTracker(MainActivity.this);
+            if(gps.canGetLocation()) {
+                lat = String.valueOf(gps.getLatitude());
+                lng = String.valueOf(gps.getLongitude());
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Your Location is -\nLat: " + lat + "\nLong: "
+                                + lng, Toast.LENGTH_LONG).show();
+            }
+            else {
+                gps.showSettingsAlert(); //show alert and ask user to turn location on
+            }
         }
+
         //set activity view
         setContentView(R.layout.activity_main);
 
@@ -81,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
 
         // Waiting on async task dangerous
+
         try {
             weatherTask.execute(lat,lng).get();
         } catch (InterruptedException | ExecutionException e) {
@@ -254,4 +250,25 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    public boolean isPermissionGranted() {
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.d("Permission Check", "Permission is granted");
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                }, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.d("Permission Check", "Permission is granted");
+            return true;
+        }
+
+    }
+
 }
