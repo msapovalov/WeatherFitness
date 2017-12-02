@@ -1,15 +1,10 @@
 package com.ucd.user.weatherfitness;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,95 +36,110 @@ public class MainActivity extends AppCompatActivity {
     String location = "";
     GPSTracker gps;
 
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(isPermissionGranted())
-        {
-            //Get GPS location
-            gps = new GPSTracker(MainActivity.this);
-            if(gps.canGetLocation()) {
-                lat = String.valueOf(gps.getLatitude());
-                lng = String.valueOf(gps.getLongitude());
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Your Location is -\nLat: " + lat + "\nLong: "
-                                + lng, Toast.LENGTH_LONG).show();
-            }
-            else {
-                gps.showSettingsAlert(); //show alert and ask user to turn location on
-            }
-        }
 
         //set activity view
         setContentView(R.layout.activity_main);
 
-        //create flipper view
-        vf = findViewById(R.id.myflipper);
+        GPSPermission gpsPermission;
+        gpsPermission = new GPSPermission(MainActivity.this);
 
-        //try to fetch current weather and calculate score
-        TextView score_id = findViewById(R.id.location_view);
-        FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+        if (!gpsPermission.checkLocationPermission()) {
+            gpsPermission.requestPermissionForLocation(GPSPermission.LOCATION_PERMISSION_REQUEST_CODE);
+        }}
 
-        // Waiting on async task dangerous
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        try {
-            weatherTask.execute(lat,lng).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        switch (requestCode) {
+            case GPSPermission.LOCATION_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+
+                    //open database
+                    openDB();
+
+                    //Get GPS location
+                    gps = new GPSTracker(MainActivity.this);
+                    if (gps.canGetLocation()) {
+                        lat = String.valueOf(gps.getLatitude());
+                        lng = String.valueOf(gps.getLongitude());
+                        Toast.makeText(
+                                getApplicationContext(),
+                                "Your Location is -\nLat: " + lat + "\nLong: "
+                                        + lng, Toast.LENGTH_LONG).show();
+
+                    //create flipper view
+                    vf = findViewById(R.id.myflipper);
+
+                    //try to fetch current weather and calculate score
+                    TextView score_id = findViewById(R.id.location_view);
+                    FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+
+                    // Waiting on async task dangerous
+                    try {
+                        weatherTask.execute(lat, lng).get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                    TextView iscore = findViewById(R.id.score_ID);
+                    String strscore = "SCORE     " + score;
+                    iscore.setText(strscore);
+
+                    //main activity buttons
+                    Button btn = findViewById(R.id.button1);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
+                            MainActivity.this.startActivityForResult(newIntent, 1);
+                        }
+                    });
+
+                    Button btn1 = findViewById(R.id.button2);
+                    btn1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AddEventToCal objEvent = new AddEventToCal(MainActivity.this);
+                            try {
+                                objEvent.AddEvent(MainActivity.this);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    Button btn2 = findViewById(R.id.button3);
+                    btn2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MainActivity.this.onClick_StartNow();
+                        }
+                    });
+
+                    Button btn3 = findViewById(R.id.button4);
+                    btn3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                            MainActivity.this.startActivity(newIntent);
+                        }
+                    });
+            }
+         else {
+            gps.showSettingsAlert(); //show alert and ask user to turn location on
         }
-
-        TextView iscore = findViewById(R.id.score_ID);
-        String strscore = "SCORE     "+ score;
-        iscore.setText(strscore);
-
-        //sqlite db implementation
-        openDB();
-
-        //main activity buttons
-        Button btn = findViewById(R.id.button1);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
-                MainActivity.this.startActivityForResult(newIntent,1);
-            }
-        });
-
-        Button btn1 = findViewById(R.id.button2);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddEventToCal objEvent = new AddEventToCal(MainActivity.this);
-                try {
-                    objEvent.AddEvent(MainActivity.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button btn2 = findViewById(R.id.button3);
-        btn2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                MainActivity.this.onClick_StartNow();
-                }
-        });
-
-        Button btn3 = findViewById(R.id.button4);
-        btn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
-                MainActivity.this.startActivity(newIntent);
-                }
-        });
-
+    } else {
+        Toast.makeText(getApplicationContext(), "Permission denied. GPS required for application to work", Toast.LENGTH_SHORT).show();
     }
+                break;
+}}
+
     //Sqllite method to open connection to db//
     public void openDB(){
         myDb = new DBAdapter(this);
@@ -250,25 +259,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
-    public boolean isPermissionGranted() {
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.d("Permission Check", "Permission is granted");
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                }, 1);
-                return false;
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            Log.d("Permission Check", "Permission is granted");
-            return true;
-        }
-
-    }
-
 }
