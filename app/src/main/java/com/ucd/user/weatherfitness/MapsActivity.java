@@ -33,8 +33,6 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     GPSTracker gps;
-    AlertDialog alertDialog;
-    DialogInterface dialogInterface;
 
 
     @Override
@@ -48,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void onSearch(View view) throws IOException {
-        EditText location_tf = (EditText) findViewById(R.id.address);
+        EditText location_tf = findViewById(R.id.address);
         String location = location_tf.getText().toString();
 
         if (!TextUtils.isEmpty(location)) {
@@ -67,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void onSave(View view) throws IOException {
-        EditText location_tf = (EditText) findViewById(R.id.address);
+        EditText location_tf = findViewById(R.id.address);
         final String location = location_tf.getText().toString();
         if (!TextUtils.isEmpty(location)) {
             double latitude = gps.getLatitude();
@@ -87,28 +85,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder
-                    .setTitle("Current location will be used")
+                    .setTitle("You didn`t select any location. Current location will be used")
                     .setMessage("Are you sure?")
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            double latitude = gps.getLatitude();
+                            double longitude = gps.getLongitude();
+                            String lat = Double.toString(gps.getLatitude());
+                            String lng = Double.toString(gps.getLongitude());
                             Geocoder geo = new Geocoder(getApplicationContext());
                             List<Address> addressList = null;
                             try {
-                                addressList = geo.getFromLocationName(location, 1);
+                                addressList = geo.getFromLocation(latitude,longitude, 1);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            Address address = addressList.get(0);
-
+                            Address current = addressList.get(0);
                             Intent resultIntent = new Intent();
-                            // TODO Add extras or a data URI to this intent as appropriate.
-                            String lat = Double.toString(address.getLatitude());
-                            String lng = Double.toString(address.getLongitude());
                             resultIntent.putExtra("lat", lat);
                             resultIntent.putExtra("lng", lng);
-                            resultIntent.putExtra("location", location);
-
+                            resultIntent.putExtra("location",current);
                             setResult(Activity.RESULT_OK, resultIntent);
                             finish();
                         }
@@ -127,7 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         //googleMap.getUiSettings().setMyLocationButtonEnabled(false); // to disable button, if crashing the app
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in current location and move the camera
         gps = new GPSTracker(MapsActivity.this);
         if (gps.canGetLocation()) {
             double lat = gps.getLatitude();
