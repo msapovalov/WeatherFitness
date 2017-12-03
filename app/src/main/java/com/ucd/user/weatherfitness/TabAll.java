@@ -38,7 +38,7 @@ public class TabAll extends Fragment {
         String[] fromFieldNames = new String[]{DBAdapter.KEY_ROWID, DBAdapter.KEY_DATETIME, DBAdapter.KEY_LOCATION, DBAdapter.KEY_SCORE};
         int[] toViewIDs = new int[]{R.id.TextViewID, R.id.TextViewDate, R.id.TextViewLocation, R.id.TextViewScore};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(getActivity().getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
-        ListView myList = (ListView) view.findViewById(R.id.Listview_fragment1);
+        ListView myList = view.findViewById(R.id.Listview_fragment1);
         myList.setAdapter(myCursorAdapter);
 
 

@@ -1,9 +1,9 @@
 package com.ucd.user.weatherfitness;
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.widget.SimpleCursorAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -41,14 +42,14 @@ public class TabMonth extends Fragment {
         Calendar cal = Calendar.getInstance();
         //Date in simpleformat
         cal.add(Calendar.MONTH, -1);
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         String monthAgo =format1.format(cal.getTime());
         Log.d("Tabweek", monthAgo);
         Cursor cursor = myDb.getRow(monthAgo);
         String[] fromFieldNames = new String[]{DBAdapter.KEY_ROWID, DBAdapter.KEY_DATETIME, DBAdapter.KEY_LOCATION, DBAdapter.KEY_SCORE};
         int[] toViewIDs = new int[]{R.id.TextViewID, R.id.TextViewDate, R.id.TextViewLocation, R.id.TextViewScore};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(getActivity().getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
-        ListView myList = (ListView) view.findViewById(R.id.Listview_month);
+        ListView myList = view.findViewById(R.id.Listview_month);
         myList.setAdapter(myCursorAdapter);
 
     }

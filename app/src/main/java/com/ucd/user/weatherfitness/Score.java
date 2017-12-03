@@ -1,22 +1,23 @@
 package com.ucd.user.weatherfitness;
 
 import android.util.Log;
+//Class which calculates the Score for the weather based on several weather dimensions
 
-public class Score {
+class Score {
 
 	private String precip;
 	private double temp;
 	private double humidity;
 	private double wind;
 	
-	public Score(String p, double t, double h, double w){
+	Score(String p, double t, double h, double w){
 		precip = p;
 		temp = t;
 		humidity = h;
 		wind = w;
 	}
 
-	public int calculateScore() {
+	int calculateScore() {
 		
 		int precipScore = precipScore();
 		int tempScore = tempScore();
@@ -40,11 +41,11 @@ public class Score {
 		else if (precip.equalsIgnoreCase("Clouds"))
 			score = 9;
         else if (precip.equalsIgnoreCase("Drizzle"))
-            score = 6;
+            score = 8;
         else if (precip.equalsIgnoreCase("Rain"))
-			score = 4;
+			score = 7;
         else if (precip.equalsIgnoreCase("Thunderstorm"))
-            score = 4;
+            score = 3;
         else if (precip.equalsIgnoreCase("Snow"))
 			score = 2;
 		else if (precip.equalsIgnoreCase("Extreme"))
@@ -80,34 +81,33 @@ public class Score {
 		else
 			score = 0;
 		
-		return score;
+		return Math.round(score);
 	}
 	
 	private int tempScore() {
-		// Temperature measured in Kelvin
+		// Temperature measured in Fahrenhight
 		
 		int score = 0;
 		
 		if (temp <= -5)	// - 5C
 			score = 1;
-		else if(temp >= 0 && temp < 5 )	// 0C
-			score = 2;
-		else if(temp >= 5 && temp < 10)	// 5C
-			score = 5;
-		else if(temp >= 10 && temp < 15)	// 10C
-			score = 7;
-		else if(temp >= 15 && temp < 20) // 15C
+		else if(temp  < 5 )	// 0C
+			score = 3;
+		else if(temp  < 10)	// 5C
+			score = 6;
+		else if(temp  < 15)	// 10C
 			score = 9;
-		else if(temp >= 20 && temp < 25) // 20C
+		else if(temp  < 20) // 15C
 			score = 10;
-		else if(temp >= 25 && temp < 30) // 25C
-			score = 8;
-		else if(temp >= 30 && temp < 35) // 30C
+		else if(temp  < 25) // 20C
+			score = 10;
+		else if(temp  < 30) // 25C
+			score = 7;
+		else if(temp  < 35) // 30C
 			score = 5;
 		else if(temp >= 35) // 35C
-			score = 1;
-
-		return score;
+			score = 2;
+		return Math.round(score);
 	}
 
 	private int humidityScore() {
@@ -130,7 +130,6 @@ public class Score {
 		else if(humidity <= 100) 
 			score = 1;
 
-		
 		return Math.round(score);
 	}
 }

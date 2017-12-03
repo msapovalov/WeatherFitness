@@ -14,4 +14,10 @@
     <string name="schedule_workout">Schedule Workout</string>
     <string name="show_workouts_history">Show Workouts History</string>
     <string name="choose_location">Choose Location</string>
+    <string name="Delete_database">Delete Database</string>
+    <string name="Delete_database_summary">Turn it on to delete database</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_schedule">ScheduleActivity</string>
 </resources>
