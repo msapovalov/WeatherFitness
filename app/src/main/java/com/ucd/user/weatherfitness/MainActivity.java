@@ -98,12 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 btn1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AddEventToCal objEvent = new AddEventToCal(MainActivity.this);
-                        try {
-                            objEvent.AddEvent(MainActivity.this);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        Intent schedule = new Intent(MainActivity.this, ScheduleActivity.class);
+                        MainActivity.this.startActivity(schedule);
                     }
                 });
 
@@ -187,12 +183,8 @@ public class MainActivity extends AppCompatActivity {
                     btn1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AddEventToCal objEvent = new AddEventToCal(MainActivity.this);
-                            try {
-                                objEvent.AddEvent(MainActivity.this);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            Intent schedule = new Intent(MainActivity.this, ScheduleActivity.class);
+                            MainActivity.this.startActivity(schedule);
                         }
                     });
 

@@ -1,10 +1,16 @@
 package com.ucd.user.weatherfitness;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +23,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Locale;
 
 
 /**
@@ -24,10 +35,21 @@ import java.text.SimpleDateFormat;
  */
 
 public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
+    private ArrayList<HashMap<String, String>> times;
+    Activity activity;
 
     TextView scoreID;
+    ListView ListViewID;
+    int scoreArray[] = new int[10];
+    String dateTimeArray[] = new String[10];
+    static String result1[];
+
     FetchWeatherTask(TextView scoreID){
         this.scoreID = scoreID;
+    }
+    public FetchWeatherTask(ListView ListViewID,Activity activity){
+        this.ListViewID = ListViewID;
+        this.activity = activity;
     }
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
@@ -100,13 +122,14 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // now we work exclusively in UTC
         dayTime = new Time();
 
-        String[] results = new String[0];
+        String[] results = new String[10];
         for (int i = 0; i < weatherArray.length(); i++) {
             String day;
             String description;
             double pressure;
-            double humidity;
+            double humidity = 0;
             double speed;
+            String dtTime = null;
 
 
             // Get the JSON object representing the day object
@@ -124,23 +147,41 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // description is in a child array called "weather", which is 1 element long.
             JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
             description = weatherObject.getString(OWM_DESCRIPTION);
-
+            String name = "";
             //Added Location name object, so we can return it to user screen
-            JSONObject cityObject = forecastJson.getJSONObject(OWM_CITY);
-            String name = cityObject.getString(OWM_NAME);
-
+            if(ListViewID==null) {
+                JSONObject cityObject = forecastJson.getJSONObject(OWM_CITY);
+                name = cityObject.getString(OWM_NAME);
+            }
             // Temperatures are in a child object called "temp".  Try not to name variables
+            JSONObject temperatureObject = null;
+            double daytemp = 0;
 
-            JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-            double daytemp = temperatureObject.getDouble(OWM_DAY);
+            if(ListViewID==null) {
+                temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
 
-            pressure = dayForecast.getDouble(OWM_PRESSURE);
-            humidity = dayForecast.getDouble(OWM_HUMIDITY);
-            speed = dayForecast.getDouble(OWM_WIND);
+                daytemp = temperatureObject.getDouble(OWM_DAY);
+                pressure = dayForecast.getDouble(OWM_PRESSURE);
+                humidity = dayForecast.getDouble(OWM_HUMIDITY);
+                speed = dayForecast.getDouble(OWM_WIND);
+            }
+            else {
+                daytemp = dayForecast.getJSONObject("main").getDouble("temp");
+                pressure = dayForecast.getJSONObject("main").getDouble("pressure");
+                dayForecast.getJSONObject("main").getDouble("humidity");
+                speed = dayForecast.getJSONObject("wind").getDouble("speed");
+                
+            }
+
+            
+            if(ListViewID!=null)
+                dtTime = dayForecast.getString("dt_txt");
 
             //calculating the score using our algorithm
             Score score = new Score(description, Math.round(daytemp), Math.round(humidity), Math.round(speed));
             int iscore = score.calculateScore();
+            scoreArray[i] = iscore;
+            dateTimeArray[i] = dtTime;
 
             MainActivity.precipitation = description;
             MainActivity.pressure = pressure;
@@ -178,6 +219,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         String format = "json";
         String units = "metric";
         int numDays = 1;
+        if(ListViewID!=null)
+            numDays = 10;
 
         // You will need to replace this key with your own one. To get a key
         // go to http://openweathermap.org/api and sign up.
@@ -188,8 +231,11 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
 
-            final String FORECAST_BASE_URL =
+            String FORECAST_BASE_URL =
                     "http://api.openweathermap.org/data/2.5/forecast/daily?";
+            if(ListViewID!=null)
+                FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast?";
+
             final String QUERY_PARAM = "lat";
             final String QUERY_PARAM2 = "lon";
             final String FORMAT_PARAM = "mode";
@@ -207,6 +253,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                     .build();
 
             URL url = new URL(builtUri.toString());
+//            if(ListViewID!=null)
+//                url = new URL("http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=19b104f014c41d11939f615df3a80edf");
 
             Log.v(LOG_TAG, "Built URI " + builtUri.toString());
 
@@ -301,8 +349,33 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             String allValues = strDate + System.lineSeparator() + strName+ System.lineSeparator() + strDescription + System.lineSeparator() + strTemp
                     + System.lineSeparator() + strPressure + System.lineSeparator() + strHumidity + System.lineSeparator() +
                     strWind + System.lineSeparator() + strScore;
-
+            if(ListViewID==null)
             scoreID.setText(allValues);
+
+            if(ListViewID!=null) {
+                //super.onPostExecute(strings);
+                times = new ArrayList<HashMap<String, String>>();
+                for (int i = 0; i < dateTimeArray.length; i++) {
+
+                    HashMap<String, String> temp = new HashMap<String, String>();
+                    temp.put("FIRST_COLUMN", dateTimeArray[i]);
+                    String score_col = Integer.toString(scoreArray[i]);
+                    temp.put("SECOND_COLUMN",score_col );
+                    //else
+                    //  temp.put("SECOND_COLUMN","no data");
+                    times.add(temp);
+                    //times.add(""+i + ":00 AM");
+
+                }
+
+                ListView lst = ListViewID;
+
+                ListViewAdapter adapter = new ListViewAdapter(activity,times);
+                lst.setAdapter(adapter);
+                lst.setOnItemClickListener(new ItemList());
+
+
+            }
             // mForecastAdapter.clear();
             //mForecastAdapter.addAll(result);
             //for (String dayForeCastStr: results){
@@ -311,4 +384,21 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         }
     }
 
+    class ItemList implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ViewGroup vg = (ViewGroup) view;
+            TextView tv = (TextView) vg.findViewById(R.id.time);
+            //Toast.makeText(activity, tv.getText().toString(), Toast.LENGTH_SHORT).show();
+
+            AddEventToCal objEvent = new AddEventToCal(activity,tv.getText().toString());
+            try {
+                objEvent.AddEvent(activity,tv.getText().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
 }
