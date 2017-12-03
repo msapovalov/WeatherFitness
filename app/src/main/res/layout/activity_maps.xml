@@ -10,7 +10,7 @@
 
         <EditText
             android:id="@+id/address"
-            android:layout_width="match_parent"
+            android:layout_width="251dp"
             android:layout_height="match_parent"
             android:ems="10"
             android:hint="Enter City and Country"

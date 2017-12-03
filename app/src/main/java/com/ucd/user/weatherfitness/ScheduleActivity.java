@@ -124,10 +124,6 @@ public class ScheduleActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setToolbar(toolbar);
 
-
-
-
-
     }
 
 
