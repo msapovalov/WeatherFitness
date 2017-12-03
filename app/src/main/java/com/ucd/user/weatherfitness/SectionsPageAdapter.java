@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Created by User on 2/28/2017.
  */
+//adaptor class to create and manipulate fragments for history activity
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
