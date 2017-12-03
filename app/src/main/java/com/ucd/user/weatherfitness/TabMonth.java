@@ -19,10 +19,13 @@ import java.util.Locale;
 /**
  * Created by mihhail_shapovalov on 11/18/17.
  */
+//Class for weekly activities fragment
 
 public class TabMonth extends Fragment {
     private static final String TAG = "TabWeek";
     DBAdapter myDb;
+
+    //we inflate the fragment with view and populate list of workouts
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,13 +34,14 @@ public class TabMonth extends Fragment {
         return view;
 
     }
-
+    //methods to run on fragment creation
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDb = new DBAdapter(getActivity());
         myDb.open();
     }
 
+    //method to populate list from SQLite and using item_layout, custom layout to show records in particular order and size
     private void populateListView(View view) {
         Calendar cal = Calendar.getInstance();
         //Date in simpleformat
