@@ -12,6 +12,7 @@ import android.widget.SimpleCursorAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -43,7 +44,7 @@ public class TabWeek extends Fragment {
         Calendar cal = Calendar.getInstance();
         //Convert date to simpleformat
         cal.add(Calendar.DAY_OF_YEAR, -7);
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         String sevenDaysAgo =format1.format(cal.getTime());
         Log.d("Tabweek", sevenDaysAgo);
 
@@ -51,7 +52,7 @@ public class TabWeek extends Fragment {
         String[] fromFieldNames = new String[]{DBAdapter.KEY_ROWID, DBAdapter.KEY_DATETIME, DBAdapter.KEY_LOCATION, DBAdapter.KEY_SCORE};
         int[] toViewIDs = new int[]{R.id.TextViewID, R.id.TextViewDate, R.id.TextViewLocation, R.id.TextViewScore};
         SimpleCursorAdapter myCursorAdapter = new SimpleCursorAdapter(getActivity().getBaseContext(), R.layout.item_layout, cursor, fromFieldNames, toViewIDs, 0);
-        ListView myList = (ListView) view.findViewById(R.id.Listview_week);
+        ListView myList = view.findViewById(R.id.Listview_week);
         myList.setAdapter(myCursorAdapter);
 
 

@@ -6,29 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.format.Time;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-
-import com.ucd.user.weatherfitness.model.FetchWeatherTask;
-
-
-import java.util.Date;
 
 import static android.content.ContentValues.TAG;
-
-/**
- * Created by Mike on 11/20/2017.
- */
 
 public class DBAdapter {
 
@@ -50,24 +29,11 @@ public class DBAdapter {
     public final String[] ALL_KEYS = new String[]{KEY_ROWID, KEY_DATETIME, KEY_LOCATION, KEY_SCORE,KEY_WIND, KEY_PRECIPITATION, KEY_TEMPERATURE, KEY_PRESSURE, KEY_LAT, KEY_LON};
 
 
-    //KEY numbers
-
-    public static final int COL_ROWID = 0;
-    public static final int COL_DATETIME = 1;
-    public static final int COL_LOCATION = 2;
-    public static final int COL_SCORE = 3;
-    public static final int COL_WIND = 4;
-    public static final int COL_PRECIPITATION = 5;
-    public static final int COL_TEMPERATURE = 6;
-    public static final int COL_PRESSURE = 7;
-    public static final int COL_LAT = 8;
-    public static final int COL_LON = 9;
-
     //DB info:
 
     public static final String DATABASE_NAME = "db";
     public static final String DATABASE_TABLE = "weather";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     //SQL Statement to create DB
 
@@ -76,7 +42,7 @@ public class DBAdapter {
             + " ("
             + KEY_ROWID + " integer primary key autoincrement, "
             + KEY_DATETIME + " text, "
-            + KEY_LOCATION + " text not null, "
+            + KEY_LOCATION + " text, "
             + KEY_LAT + " text not null, "
             + KEY_LON + " text not null, "
             + KEY_WIND + " text not null, "
@@ -85,8 +51,6 @@ public class DBAdapter {
             + KEY_PRESSURE + " text not null, "
             + KEY_SCORE + " text"
             + ");";
-
-
 
     private final Context context;
     private DatabaseHelper myDBHelper;
@@ -134,7 +98,7 @@ public class DBAdapter {
         return db.delete(DATABASE_TABLE, where, null) != 0;
     }
 
-    public void deleteAll() {
+    public Cursor deleteAll() {
         Cursor c = getAllRows();
         long rowId = c.getColumnIndexOrThrow(KEY_ROWID);
         if (c.moveToFirst()) {
@@ -143,13 +107,12 @@ public class DBAdapter {
             } while (c.moveToNext());
         }
         c.close();
+        return c;
     }
 
     //select all
     public Cursor getAllRows() {
-        String where = null;
         Cursor c = db.rawQuery("SELECT * FROM weather", null);
-        //Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, null, null, null, null, null, null);
             if (c != null) {
                 c.moveToFirst();
             }
@@ -159,8 +122,6 @@ public class DBAdapter {
     //select single row
 
     public Cursor getRow(String datetime) {
-        //String where = KEY_DATETIME + " < " + "'" + datetime + "'";
-        //Cursor c = db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
         Cursor c = db.rawQuery("SELECT _id, datetime, location, score FROM weather WHERE datetime > ?", new String[]{datetime});
         if (c != null) {
             c.moveToFirst();

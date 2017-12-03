@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ucd.user.weatherfitness.MainActivity">
+    tools:context="com.ucd.user.weatherfitness.MainActivity"
+    android:background="@drawable/main_screen_image">
 
     <Button
         android:id="@+id/button1"
@@ -16,30 +17,67 @@
         android:text="@string/choose_location"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/score_ID"
+        app:layout_constraintBottom_toTopOf="@+id/myflipper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
 
-    <TextView
-        android:id="@+id/score_ID"
-        style="@style/Base.TextAppearance.AppCompat"
+    <ViewFlipper
+        android:id="@+id/myflipper"
         android:layout_width="0dp"
-        android:layout_height="172dp"
+        android:layout_height="220dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:ems="10"
-        android:labelFor="@+id/score_ID"
-        android:selectAllOnFocus="false"
-        android:singleLine="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@id/button2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button1" />
+        app:layout_constraintTop_toBottomOf="@id/button1">
+
+        <TextView
+            android:id="@+id/score_ID"
+            style="@style/Base.TextAppearance.AppCompat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:ems="10"
+            android:labelFor="@+id/score_ID"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="70sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/location_view"
+            style="@style/Base.TextAppearance.AppCompat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:ems="10"
+            android:labelFor="@+id/location_view"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textSize="18sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+    </ViewFlipper>
 
 
     <Button
@@ -54,8 +92,11 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/score_ID" />
+        app:layout_constraintTop_toBottomOf="@id/myflipper"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/button3"
@@ -70,7 +111,9 @@
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button2" />
+        app:layout_constraintTop_toBottomOf="@id/button2"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/button4"
@@ -85,7 +128,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button3" />
+        app:layout_constraintTop_toBottomOf="@id/button3"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
