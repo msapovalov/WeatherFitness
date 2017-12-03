@@ -10,6 +10,7 @@ import android.widget.Toast;
 /**
  * Created by Mike on 12/2/2017.
  */
+//this class checks if App has permissions for ACCESS_FINE_LOCATION
 
 public class GPSPermission {
     Activity activity;
@@ -20,7 +21,7 @@ public class GPSPermission {
         this.activity = activity;
         this.mContext = activity;
     }
-
+    //checking if permission is there
     public boolean checkLocationPermission(){
 
         int result = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -30,7 +31,7 @@ public class GPSPermission {
             return false;
         }
     }
-
+    //requesting permission
     public void requestPermissionForLocation(int locationPermissionRequestCode){
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)){
             Toast.makeText(mContext.getApplicationContext(), "Location permission needed. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
