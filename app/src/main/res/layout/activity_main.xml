@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ucd.user.weatherfitness.MainActivity">
+    tools:context="com.ucd.user.weatherfitness.MainActivity"
+    android:background="@drawable/main_screen_image">
 
     <Button
         android:id="@+id/button1"
@@ -19,7 +20,9 @@
         app:layout_constraintBottom_toTopOf="@+id/myflipper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
 
     <ViewFlipper
@@ -65,6 +68,7 @@
             android:ems="10"
             android:labelFor="@+id/location_view"
             android:textAlignment="textStart"
+            android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textSize="18sp"
             android:visibility="visible"
@@ -90,7 +94,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/myflipper" />
+        app:layout_constraintTop_toBottomOf="@id/myflipper"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/button3"
@@ -105,7 +111,9 @@
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button2" />
+        app:layout_constraintTop_toBottomOf="@id/button2"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/button4"
@@ -120,7 +128,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button3" />
+        app:layout_constraintTop_toBottomOf="@id/button3"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

@@ -15,7 +15,8 @@
         android:textAlignment="viewStart"
         app:layout_constraintEnd_toStartOf="@+id/TextViewDate"
         app:layout_constraintStart_toEndOf="@+id/itemlayoutlist"
-        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/TextViewDate"
@@ -27,7 +28,8 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/TextViewLocation"
         app:layout_constraintStart_toEndOf="@+id/TextViewID"
-        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/TextViewLocation"
@@ -39,7 +41,8 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/TextViewScore"
         app:layout_constraintStart_toEndOf="@+id/TextViewDate"
-        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/TextViewScore"
@@ -50,5 +53,6 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/itemlayoutlist"
         app:layout_constraintStart_toEndOf="@+id/TextViewLocation"
-        app:layout_constraintTop_toTopOf="@id/itemlayoutlist" />
+        app:layout_constraintTop_toTopOf="@id/itemlayoutlist"
+        android:textColor="@color/colorPrimaryDark"/>
 </android.support.constraint.ConstraintLayout>

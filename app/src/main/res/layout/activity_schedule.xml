@@ -37,12 +37,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <LinearLayout
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_marginTop="100dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/schedule_screen_image">
 
 
         <ListView
@@ -50,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="12dp"
+            android:minHeight="?android:attr/listPreferredItemHeight"
             android:textStyle="bold" />
     </LinearLayout>
 
