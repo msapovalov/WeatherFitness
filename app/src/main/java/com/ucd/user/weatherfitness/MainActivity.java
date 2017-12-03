@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                     vf.showNext();
                 }
 
-                // if right to left swipe on screen
+                /// if right to left swipe on screen
                 if (lastX > currentX)
                 {
                     if (vf.getDisplayedChild() == 1)
