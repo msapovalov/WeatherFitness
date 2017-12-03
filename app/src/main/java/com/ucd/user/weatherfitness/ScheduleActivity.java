@@ -116,26 +116,12 @@ public class ScheduleActivity extends AppCompatActivity {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        //weatherTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        //ListViewAdapter adapter=new ListViewAdapter(this, times);
-        //lst.setAdapter(adapter);
-        // ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,times);
-        //lst.setAdapter(arrayAdapter);
-        //((TextView) lst.findViewById(R.id.listview1)).setTypeface(null, Typeface.BOLD);
+
         lst.setSelection(hour);
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setToolbar(toolbar);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
 
 
@@ -238,16 +224,7 @@ public class ScheduleActivity extends AppCompatActivity {
                     return "Schedule Next 10 slots";
 //                case 1:
 //                    return "Tomorrow";
-                /*case 2:
-                    return "Wed";
-                case 3:
-                    return "Thu";
-                case 4:
-                    return "Fri";
-                case 5:
-                    return "Sat";
-                case 6:
-                    return "Sun";*/
+               
             }
             return null;
         }
