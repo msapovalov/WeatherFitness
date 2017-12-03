@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WeatherFitness.iml" filepath="$PROJECT_DIR$/WeatherFitness.iml" />
-      <module fileurl="file://D:\files and projects\Android\GitHub\WeatherFitnessFinal\WeatherFitness.iml" filepath="D:\files and projects\Android\GitHub\WeatherFitnessFinal\WeatherFitness.iml" />
-      <module fileurl="file://C:\Users\samev\Documents\College\Android App Dev\Project\WeatherFitness\WeatherFitnessFinal.iml" filepath="C:\Users\samev\Documents\College\Android App Dev\Project\WeatherFitness\WeatherFitnessFinal.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
