@@ -1,9 +1,10 @@
 package com.ucd.user.weatherfitness;
 
 import android.util.Log;
-//Class which calculates the Score for the weather based on several weather dimensions
+
 
 class Score {
+	// calculates the Score for the weather, based on several weather dimensions
 
 	private String precip;
 	private double temp;
@@ -18,7 +19,7 @@ class Score {
 	}
 
 	int calculateScore() {
-		
+		// Calculates the score and returns it
 		int precipScore = precipScore();
 		int tempScore = tempScore();
 		int humidityScore = humidityScore();
@@ -34,6 +35,7 @@ class Score {
 	}
 	
 	private int precipScore() {
+		// Generates score for precipitation description
 		int score = 0;
 		
 		if (precip.equalsIgnoreCase("Clear"))
@@ -54,7 +56,7 @@ class Score {
 	}
 	
 	private int windScore() {
-		// Wind measured in m/s
+		// Generate Score based on wind measured in m/s
 		// Based on the beaufort Scale
 		int score = 0;
 		
@@ -85,8 +87,7 @@ class Score {
 	}
 	
 	private int tempScore() {
-		// Temperature measured in Fahrenhight
-		
+		// Generate Score based on temperature in Celsius
 		int score = 0;
 		
 		if (temp <= -5)	// - 5C
@@ -111,8 +112,8 @@ class Score {
 	}
 
 	private int humidityScore() {
+		// Generate Score based on Humidity
 		// Humidity measured as percentage of water vapor/m^3 volume of air
-		
 		int score = 0;
 		
 		if (humidity < 10)

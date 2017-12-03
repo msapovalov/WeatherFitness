@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
+    // Main activity of Weather Fitness application
+    // Displays Weather Score and detailed weather info on view flipper and four buttons
 
     //db vars
     public DBAdapter myDb;
@@ -62,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 lng = String.valueOf(gps.getLongitude());
                 //toast for troubleshooting purposes
                 //Toast.makeText(
-                  //      getApplicationContext(),
-                    //    "Your Location is -\nLat: " + lat + "\nLong: "
-                      //          + lng, Toast.LENGTH_LONG).show();
+                //      getApplicationContext(),
+                //    "Your Location is -\nLat: " + lat + "\nLong: "
+                //          + lng, Toast.LENGTH_LONG).show();
 
                 //create flipper view
                 vf = findViewById(R.id.myflipper);
@@ -99,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent schedule = new Intent(MainActivity.this, ScheduleActivity.class);
+                        schedule.putExtra("lat", lat);
+                        schedule.putExtra("lng", lng);
                         MainActivity.this.startActivity(schedule);
                     }
                 });
@@ -147,72 +151,72 @@ public class MainActivity extends AppCompatActivity {
                         lng = String.valueOf(gps.getLongitude());
                         //Test toast for tests
                         // Toast.makeText(
-                          //      getApplicationContext(),
-                            //    "Your Location is -\nLat: " + lat + "\nLong: "
-                              //          + lng, Toast.LENGTH_LONG).show();
+                        //      getApplicationContext(),
+                        //    "Your Location is -\nLat: " + lat + "\nLong: "
+                        //          + lng, Toast.LENGTH_LONG).show();
 
-                    //create flipper view
-                    vf = findViewById(R.id.myflipper);
+                        //create flipper view
+                        vf = findViewById(R.id.myflipper);
 
-                    //try to fetch current weather and calculate score
-                    TextView score_id = findViewById(R.id.location_view);
-                    FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
+                        //try to fetch current weather and calculate score
+                        TextView score_id = findViewById(R.id.location_view);
+                        FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
 
-                    // Waiting on async task dangerous
-                    try {
-                        weatherTask.execute(lat, lng).get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                        // Waiting on async task dangerous
+                        try {
+                            weatherTask.execute(lat, lng).get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+
+                        TextView iscore = findViewById(R.id.score_ID);
+                        String strscore = "SCORE     " + score;
+                        iscore.setText(strscore);
+
+                        //main activity buttons
+                        Button btn = findViewById(R.id.button1);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
+                                MainActivity.this.startActivityForResult(newIntent, 1);
+                            }
+                        });
+
+                        Button btn1 = findViewById(R.id.button2);
+                        btn1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent schedule = new Intent(MainActivity.this, ScheduleActivity.class);
+                                MainActivity.this.startActivity(schedule);
+                            }
+                        });
+
+                        Button btn2 = findViewById(R.id.button3);
+                        btn2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                MainActivity.this.onClick_StartNow();
+                            }
+                        });
+
+                        Button btn3 = findViewById(R.id.button4);
+                        btn3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                                MainActivity.this.startActivity(newIntent);
+                            }
+                        });
                     }
-
-                    TextView iscore = findViewById(R.id.score_ID);
-                    String strscore = "SCORE     " + score;
-                    iscore.setText(strscore);
-
-                    //main activity buttons
-                    Button btn = findViewById(R.id.button1);
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent newIntent = new Intent(MainActivity.this, MapsActivity.class);
-                            MainActivity.this.startActivityForResult(newIntent, 1);
-                        }
-                    });
-
-                    Button btn1 = findViewById(R.id.button2);
-                    btn1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent schedule = new Intent(MainActivity.this, ScheduleActivity.class);
-                            MainActivity.this.startActivity(schedule);
-                        }
-                    });
-
-                    Button btn2 = findViewById(R.id.button3);
-                    btn2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            MainActivity.this.onClick_StartNow();
-                        }
-                    });
-
-                    Button btn3 = findViewById(R.id.button4);
-                    btn3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent newIntent = new Intent(MainActivity.this, HistoryActivity.class);
-                            MainActivity.this.startActivity(newIntent);
-                        }
-                    });
-            }
-         else {
-            gps.showSettingsAlert(); //show alert and ask user to turn location on
-        }
-    } else {
-        Toast.makeText(getApplicationContext(), "Permission denied. GPS required for application to work", Toast.LENGTH_SHORT).show();
-    }
+                    else {
+                        gps.showSettingsAlert(); //show alert and ask user to turn location on
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission denied. GPS required for application to work", Toast.LENGTH_SHORT).show();
+                }
                 break;
-}}
+        }}
 
     //Sqllite method to open connection to db//
     public void openDB(){
@@ -227,18 +231,16 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-                String returnValue = data.getStringExtra("lat");
-                String returnValue2 = data.getStringExtra("lng");
-
-                //location = String.valueOf(address);
+                // Get lat and long from returned values from maps
+                lat = data.getStringExtra("lat");
+                lng = data.getStringExtra("lng");
                 location = data.getStringExtra("location");
 
+                // Refresh the view flipper with new score and weather info
                 TextView score_id = findViewById(R.id.location_view);
                 FetchWeatherTask weatherTask = new FetchWeatherTask(score_id);
                 try {
-                    weatherTask.execute(returnValue, returnValue2).get();
+                    weatherTask.execute(lat, lng).get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -246,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView iscore = findViewById(R.id.score_ID);
                 String strscore = "SCORE     "+ score;
                 iscore.setText(strscore);
+
                 if (score <= 4) {
                     iscore.setTextColor(Color.RED);
                 }
@@ -253,8 +256,8 @@ public class MainActivity extends AppCompatActivity {
                     iscore.setTextColor(Color.BLUE);
                 }
                 else {
-                        iscore.setTextColor(Color.GREEN);
-                    }
+                    iscore.setTextColor(Color.GREEN);
+                }
 
             }
         }
@@ -312,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                     // set the required Animation type to ViewFlipper
                     // The Next screen will come in form Left and current Screen will go OUT from Right
                     vf.setInAnimation(this, R.anim.in_from_left);
-                   vf.setOutAnimation(this, R.anim.out_to_right);
+                    vf.setOutAnimation(this, R.anim.out_to_right);
                     // Show the next Screen
                     vf.showNext();
                 }
