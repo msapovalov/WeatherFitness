@@ -68,18 +68,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         EditText location_tf = findViewById(R.id.address);
         final String location = location_tf.getText().toString();
         if (!TextUtils.isEmpty(location)) {
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-            String lat = Double.toString(gps.getLatitude());
-            String lng = Double.toString(gps.getLongitude());
             Geocoder geo = new Geocoder(this);
-            List<Address> addressList = geo.getFromLocation(latitude,longitude,1);
+            List<Address> addressList = geo.getFromLocationName(location, 1);
             Address address = addressList.get(0);
 
             Intent resultIntent = new Intent();
+            String lat = Double.toString(address.getLatitude());
+            String lng = Double.toString(address.getLongitude());
             resultIntent.putExtra("lat", lat);
             resultIntent.putExtra("lng", lng);
-            resultIntent.putExtra("location",address);
+            resultIntent.putExtra("location",location );
+
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
         } else {
