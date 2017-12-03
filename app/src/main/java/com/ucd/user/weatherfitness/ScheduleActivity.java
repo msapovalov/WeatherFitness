@@ -224,7 +224,7 @@ public class ScheduleActivity extends AppCompatActivity {
                     return "Schedule Next 10 slots";
 //                case 1:
 //                    return "Tomorrow";
-               
+
             }
             return null;
         }
