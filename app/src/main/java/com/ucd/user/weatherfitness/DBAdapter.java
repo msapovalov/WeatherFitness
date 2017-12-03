@@ -13,7 +13,7 @@ public class DBAdapter {
 
     private static final String LOG_TAG = "DBAdapter"; //logging DB version
 
-    // Field Names
+    //Declaring Field Names
     public static final String KEY_ROWID = "_id";
     public static final String KEY_DATETIME = "datetime";
     public static final String KEY_LOCATION = "location";
@@ -29,7 +29,7 @@ public class DBAdapter {
     public final String[] ALL_KEYS = new String[]{KEY_ROWID, KEY_DATETIME, KEY_LOCATION, KEY_SCORE,KEY_WIND, KEY_PRECIPITATION, KEY_TEMPERATURE, KEY_PRESSURE, KEY_LAT, KEY_LON};
 
 
-    //DB info:
+    //Declaring DB info:
 
     public static final String DATABASE_NAME = "db";
     public static final String DATABASE_TABLE = "weather";
@@ -60,22 +60,22 @@ public class DBAdapter {
         this.context = ctx;
         myDBHelper = new DatabaseHelper(context);
     }
-
+    //method to open writable db
     public DBAdapter open () {
         db = myDBHelper.getWritableDatabase();
         return this;
     }
+    //method to open readable db
     public DBAdapter openread() {
         db = myDBHelper.getReadableDatabase();
         return this;
     }
-
+    //method to close connection to db
     public void close() {
         myDBHelper.close();
     }
 
-    //insert a row to db
-
+    //insert a single row to db
     public long insertRow(String datetime, String location, String score, String wind, String precipitation, String temperature, String pressure, String lat, String lon) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_DATETIME, String.valueOf(datetime));
@@ -92,12 +92,11 @@ public class DBAdapter {
     }
 
     //delete a row in db
-
     public boolean deleteRow(long rowID) {
         String where = KEY_ROWID + "=" + rowID;
         return db.delete(DATABASE_TABLE, where, null) != 0;
     }
-
+    //delete all rows in table
     public Cursor deleteAll() {
         Cursor c = getAllRows();
         long rowId = c.getColumnIndexOrThrow(KEY_ROWID);
@@ -120,7 +119,6 @@ public class DBAdapter {
     }
 
     //select single row
-
     public Cursor getRow(String datetime) {
         Cursor c = db.rawQuery("SELECT _id, datetime, location, score FROM weather WHERE datetime > ?", new String[]{datetime});
         if (c != null) {
@@ -130,7 +128,6 @@ public class DBAdapter {
     }
 
     //change row
-
     public boolean updateRow(long rowID, String datetime, String location, String score, String wind, String precipitation, String temperature, String pressure, String lat, String lon) {
         String where = KEY_ROWID + "=" + rowID;
         ContentValues newValues = new ContentValues();
@@ -145,17 +142,18 @@ public class DBAdapter {
         newValues.put(KEY_LON, lon);
         return  db.update(DATABASE_TABLE, newValues, where, null) != 0;
     }
-
+    
+    //SQLiteOpenhelper Class to work with DB
     private static class DatabaseHelper extends SQLiteOpenHelper{
         DatabaseHelper(Context context){
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
-
+        //Create DB
         @Override
         public void onCreate(SQLiteDatabase _db) {
             _db.execSQL(DATABASE_CREATE_SQL);
         }
-
+        //Method used to upgrade or delete DB    
         @Override
         public void onUpgrade(SQLiteDatabase _db, int oldVersion, int newVersion) {
             Log.w(TAG, "UPgrading application database from verion" + oldVersion + "to " + newVersion + ", which will destroy all data!");
