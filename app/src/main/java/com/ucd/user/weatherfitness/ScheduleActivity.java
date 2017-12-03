@@ -114,7 +114,7 @@ public class ScheduleActivity extends AppCompatActivity {
         FetchWeatherTask weatherTask = new FetchWeatherTask(lst,this);
         //weatherTask.execute();
         try {
-            weatherTask.execute("-6","53").get();
+            weatherTask.execute(lat,lng).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
